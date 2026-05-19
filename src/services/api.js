@@ -1,4 +1,5 @@
-const BASE_URL = 'https://backend-api-services-291631508657.asia-southeast2.run.app';
+// const BASE_URL = 'https://backend-api-services-291631508657.asia-southeast2.run.app';
+const BASE_URL = 'https://backend-api-services-173368161554.asia-southeast2.run.app';
 
 // Helper to handle response
 const handleResponse = async (response) => {
