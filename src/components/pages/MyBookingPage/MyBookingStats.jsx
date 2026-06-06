@@ -1,22 +1,48 @@
-import { Col, Row } from 'react-bootstrap'
-
 export default function MyBookingStats({ activeCount, expiredCount, totalCount }) {
-  const items = [
-    { label: 'Aktif', value: activeCount, color: 'var(--pf-accent)', bg: 'rgba(0,210,255,0.08)', border: 'var(--pf-border2)' },
-    { label: 'Selesai', value: expiredCount, color: 'var(--pf-text3)', bg: 'transparent', border: 'var(--pf-border)' },
-    { label: 'Total', value: totalCount, color: 'var(--pf-text)', bg: 'transparent', border: 'var(--pf-border)' },
+  const stats = [
+    {
+      id: 'stat-active',
+      icon: '🟢',
+      value: activeCount,
+      label: 'Parkiran Aktif',
+      color: 'var(--pf-green)',
+      bg: 'var(--pf-green-bg)',
+      border: 'rgba(76,175,80,0.3)',
+    },
+    {
+      id: 'stat-completed',
+      icon: '✓',
+      value: expiredCount,
+      label: 'Selesai / Kedaluwarsa',
+      color: 'var(--pf-text3)',
+      bg: 'var(--pf-card2)',
+      border: 'var(--pf-border)',
+    },
+    {
+      id: 'stat-total',
+      icon: '🅿️',
+      value: totalCount,
+      label: 'Total Booking',
+      color: 'var(--pf-accent)',
+      bg: 'var(--pf-accent-glow)',
+      border: 'var(--pf-border2)',
+    },
   ]
 
   return (
-    <Row className="g-3 mb-4">
-      {items.map(item => (
-        <Col xs={4} key={item.label}>
-          <div className="stat-card" style={{ background: item.bg, borderColor: item.border }}>
-            <div className="stat-card-value" style={{ color: item.color }}>{item.value}</div>
-            <div className="stat-card-label">{item.label}</div>
-          </div>
-        </Col>
+    <div className="booking-stats-row mb-4">
+      {stats.map(s => (
+        <div
+          key={s.id}
+          id={s.id}
+          className="booking-stat-card"
+          style={{ background: s.bg, borderColor: s.border }}
+        >
+          <div className="booking-stat-icon" style={{ color: s.color }}>{s.icon}</div>
+          <div className="booking-stat-value" style={{ color: s.color }}>{s.value}</div>
+          <div className="booking-stat-label">{s.label}</div>
+        </div>
       ))}
-    </Row>
+    </div>
   )
 }

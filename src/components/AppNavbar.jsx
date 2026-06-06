@@ -2,8 +2,27 @@ import { useState, useEffect } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Navbar, Nav, Container, Button, Badge } from 'react-bootstrap'
 import { getActiveBookings } from '../utils/bookingStore'
+import { useTheme } from '../context/ThemeContext'
 
 const CDN = 'https://storage.googleapis.com/parkfinderbucket'
+
+function ThemeToggleButton() {
+  const { theme, resolvedTheme, toggleTheme } = useTheme()
+
+  const icon = theme === 'system' ? '💻' : resolvedTheme === 'dark' ? '🌙' : '☀️'
+  const label = theme === 'system' ? 'System' : resolvedTheme === 'dark' ? 'Dark' : 'Light'
+
+  return (
+    <button
+      className="theme-toggle"
+      onClick={toggleTheme}
+      title={`Theme: ${label} (click to cycle)`}
+      aria-label={`Switch theme, current: ${label}`}
+    >
+      <span className="theme-toggle-icon">{icon}</span>
+    </button>
+  )
+}
 
 export default function AppNavbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -14,7 +33,6 @@ export default function AppNavbar() {
   useEffect(() => {
     const update = () => setActiveCount(getActiveBookings().length)
     update()
-    // Refresh saat tab aktif kembali
     window.addEventListener('focus', update)
     return () => window.removeEventListener('focus', update)
   }, [])
@@ -30,6 +48,12 @@ export default function AppNavbar() {
     setExpanded(false)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
+
+  const NAV_LINKS = [
+    { to: '/',           label: 'Beranda',        end: true },
+    { to: '/parking',    label: 'Cari Parkir',     end: false },
+    { to: '/my-booking', label: 'Parkiran Aktif',  end: false, badge: activeCount },
+  ]
 
   return (
     <Navbar
@@ -49,25 +73,24 @@ export default function AppNavbar() {
             src={`${CDN}/foto/logo.png`}
             alt="ParkFinder"
             style={{ height: 38, width: 'auto', objectFit: 'contain' }}
-            onError={e => { e.target.style.display='none' }}
+            onError={e => { e.target.style.display = 'none' }}
           />
         </Navbar.Brand>
 
-        <Navbar.Toggle aria-controls="pf-nav" />
+        {/* Mobile: theme toggle + hamburger */}
+        <div className="d-flex align-items-center gap-2 d-lg-none">
+          <ThemeToggleButton />
+          <Navbar.Toggle aria-controls="pf-nav" />
+        </div>
 
         <Navbar.Collapse id="pf-nav">
           <Nav className="mx-auto gap-1">
-            {[
-              { to: '/',           label: 'Beranda' },
-              { to: '/parking',    label: 'Cari Parkir' },
-              { to: '/booking',    label: 'Booking' },
-              { to: '/my-booking', label: 'Parkiran Aktif', badge: activeCount },
-            ].map(({ to, label, badge }) => (
+            {NAV_LINKS.map(({ to, label, end, badge }) => (
               <Nav.Link
                 key={to}
                 as={NavLink}
                 to={to}
-                end={to === '/'}
+                end={end}
                 onClick={() => setExpanded(false)}
                 className="d-flex align-items-center gap-1"
               >
@@ -75,7 +98,12 @@ export default function AppNavbar() {
                 {badge > 0 && (
                   <Badge
                     pill
-                    style={{ fontSize:10, background:'var(--pf-accent)', color:'#000', fontWeight:700 }}
+                    style={{
+                      fontSize: 10,
+                      background: 'var(--pf-accent)',
+                      color: 'var(--pf-text-inv)',
+                      fontWeight: 700,
+                    }}
                   >
                     {badge}
                   </Badge>
@@ -84,12 +112,18 @@ export default function AppNavbar() {
             ))}
           </Nav>
 
-          <Button
-            className="btn-pf-primary btn"
-            onClick={() => handleNav('/parking')}
-          >
-            Cari Parkir Sekarang
-          </Button>
+          {/* Desktop: theme toggle + CTA */}
+          <div className="d-flex align-items-center gap-3">
+            <span className="d-none d-lg-flex">
+              <ThemeToggleButton />
+            </span>
+            <Button
+              className="btn-pf-primary btn"
+              onClick={() => handleNav('/parking')}
+            >
+              🅿 Cari Parkir
+            </Button>
+          </div>
         </Navbar.Collapse>
       </Container>
     </Navbar>

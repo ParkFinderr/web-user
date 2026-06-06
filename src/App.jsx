@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { ThemeProvider } from './context/ThemeContext'
 import AppNavbar from './components/AppNavbar'
 import BookingPage from './pages/BookingPage'
 import CheckoutPage from './pages/CheckoutPage'
@@ -11,18 +12,20 @@ import './styles/index.css'
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <AppNavbar />
-      <Routes>
-        <Route path="/"        element={<LandingPage />} />
-        <Route path="/scan"    element={<ScanPage />} />
-        <Route path="/parking" element={<ParkingPage />} />
-        <Route path="/booking" element={<BookingPage />} />
-        <Route path="/swap"     element={<SwapPage />} />
-        <Route path="/checkout"   element={<CheckoutPage />} />
-        <Route path="/my-booking" element={<MyBookingPage />} />
-        <Route path="*"        element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider>
+      <BrowserRouter>
+        <AppNavbar />
+        <Routes>
+          <Route path="/"        element={<LandingPage />} />
+          <Route path="/scan"    element={<ScanPage />} />
+          <Route path="/parking" element={<ParkingPage />} />
+          <Route path="/booking" element={<BookingPage />} />
+          <Route path="/swap"     element={<SwapPage />} />
+          <Route path="/checkout"   element={<CheckoutPage />} />
+          <Route path="/my-booking" element={<MyBookingPage />} />
+          <Route path="*"        element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   )
 }

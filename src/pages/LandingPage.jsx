@@ -15,25 +15,41 @@ const CDN = 'https://storage.googleapis.com/parkfinderbucket'
 const STATS = [
   { value: '150+', label: 'Gedung Parkir' },
   { value: '50K+', label: 'Pengguna Aktif' },
-  { value: '99%', label: 'Tingkat Keberhasilan' },
+  { value: '99%',  label: 'Tingkat Keberhasilan' },
   { value: '24/7', label: 'Layanan Tersedia' },
 ]
 
 const FEATURES = [
-  { icon: '🔍', title: 'Cari Parkir Real-time', desc: 'Temukan slot parkir tersedia di sekitar Anda secara real-time.' },
-  { icon: '⚡', title: 'Booking Instan', desc: 'Amankan slot parkir favorit Anda dalam hitungan detik.' },
-  { icon: '📱', title: 'QR Ticket', desc: 'Scan QR code tiket parkir digital. Tanpa kertas, tanpa antre.' },
-  { icon: '🗺️', title: 'Panduan Navigasi', desc: 'Panduan langkah demi langkah menuju slot parkir Anda.' },
-  { icon: '🔔', title: 'Notifikasi Aktif', desc: 'Pengingat otomatis sebelum waktu booking Anda habis.' },
-  { icon: '🔒', title: 'Slot Terjamin Aman', desc: 'Slot yang sudah di-booking tidak bisa diambil orang lain.' },
+  { icon: '🔍', title: 'Cari Parkir Real-time',  desc: 'Temukan slot parkir tersedia di sekitar Anda secara real-time.' },
+  { icon: '⚡', title: 'Booking Instan',         desc: 'Amankan slot parkir favorit Anda dalam hitungan detik.' },
+  { icon: '📱', title: 'QR Ticket Digital',      desc: 'Scan QR code tiket parkir digital. Tanpa kertas, tanpa antre.' },
+  { icon: '🗺️', title: 'Panduan Navigasi',       desc: 'Panduan langkah demi langkah menuju slot parkir Anda.' },
+  { icon: '🔔', title: 'Notifikasi Aktif',       desc: 'Pengingat otomatis sebelum waktu booking Anda habis.' },
+  { icon: '🔒', title: 'Slot Terjamin Aman',     desc: 'Slot yang sudah di-booking tidak bisa diambil orang lain.' },
 ]
 
-
-
+// Steps now use icons only – no CDN dependency
 const STEPS = [
-  { num: '01', img: `${CDN}/foto/tutor1.png`, title: 'Cari Gedung Parkir', desc: 'Gunakan pencarian untuk menemukan gedung parkir terdekat dan lihat slot secara real-time.' },
-  { num: '02', img: `${CDN}/foto/tutor2.png`, title: 'Pilih & Booking Slot', desc: 'Pilih lantai dan nomor slot tersedia, lalu booking untuk amankan tempat Anda.' },
-  { num: '03', img: `${CDN}/foto/tutor3.png`, title: 'Scan & Masuk', desc: 'Tiba di lokasi, scan QR tiket digital Anda untuk mengaktifkan sesi parkir.' },
+  {
+    num: '01',
+    title: 'Cari Gedung Parkir',
+    desc: 'Gunakan pencarian untuk menemukan gedung parkir terdekat dan lihat slot secara real-time.',
+  },
+  {
+    num: '02',
+    title: 'Pilih & Booking Slot',
+    desc: 'Pilih lantai dan nomor slot tersedia, lalu booking untuk amankan tempat Anda.',
+  },
+  {
+    num: '03',
+    title: 'Scan & Masuk',
+    desc: 'Tiba di lokasi, scan QR tiket digital Anda untuk mengaktifkan sesi parkir.',
+  },
+  {
+    num: '04',
+    title: 'Selesai & Keluar',
+    desc: 'Setelah selesai parkir, tekan "Selesai" dan keluar area dengan mudah.',
+  },
 ]
 
 export default function LandingPage() {
@@ -49,7 +65,7 @@ export default function LandingPage() {
             name: p.name,
             occupancy: p.totalSlots > 0 ? Math.round(((p.totalSlots - p.availableSlots) / p.totalSlots) * 100) : 0,
             slots: `${p.availableSlots}/${p.totalSlots} Kosong`,
-            distance: '1.2 km', // Mock distance
+            distance: '1.2 km',
             tag: p.availableSlots > 0 ? (p.availableSlots < p.totalSlots * 0.2 ? 'Ramai' : 'Tersedia') : 'Penuh',
             tagClass: p.availableSlots > 0 ? (p.availableSlots < p.totalSlots * 0.2 ? 'orange' : 'green') : 'red',
             variant: p.availableSlots > 0 ? (p.availableSlots < p.totalSlots * 0.2 ? 'warning' : 'info') : 'danger',
@@ -57,14 +73,13 @@ export default function LandingPage() {
           setParkings(formatted)
         }
       })
-      .catch(err => console.error("Error fetching areas", err))
+      .catch(err => console.error('Error fetching areas', err))
   }, [])
 
   return (
     <div className="landing">
       <LandingHero
-        cdn={CDN}
-        onPrimaryCta={() => navigate('/scan')}
+        onPrimaryCta={() => navigate('/parking')}
         onSecondaryCta={() => navigate('/parking')}
       />
       <LandingStats stats={STATS} />

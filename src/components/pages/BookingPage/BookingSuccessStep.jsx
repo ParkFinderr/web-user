@@ -1,59 +1,153 @@
-import { Badge, Button, Card, Col, Row } from 'react-bootstrap'
+import { Suspense, lazy, useEffect, useState } from 'react'
+import { Badge, Button, Col, Row } from 'react-bootstrap'
 
-export default function BookingSuccessStep({ ticketCode, form, parking, onSwap, onCheckout, onMyBooking, onBookingAgain, onHome }) {
+const CarModel3D = lazy(() => import('../../3d/CarModel3D'))
+
+// CSS confetti pieces
+const CONFETTI_COLORS = ['#00D2FF', '#6366F1', '#10B981', '#F59E0B', '#EF5350', '#8B5CF6', '#EC4899']
+
+function Confetti() {
+  const pieces = Array.from({ length: 18 }, (_, i) => ({
+    id: i,
+    color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+    left: `${(i * 5.5 + Math.random() * 5).toFixed(1)}%`,
+    delay: `${(i * 0.09).toFixed(2)}s`,
+    duration: `${(1.6 + (i % 5) * 0.2).toFixed(1)}s`,
+    size: i % 3 === 0 ? 10 : 7,
+  }))
+
+  return (
+    <div className="confetti-container" aria-hidden="true">
+      {pieces.map(p => (
+        <div
+          key={p.id}
+          className="confetti-piece"
+          style={{
+            left: p.left,
+            top: '-10px',
+            background: p.color,
+            width: p.size,
+            height: p.size,
+            borderRadius: p.id % 2 === 0 ? '50%' : '2px',
+            animationDuration: p.duration,
+            animationDelay: p.delay,
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
+export default function BookingSuccessStep({
+  ticketCode,
+  form,
+  parking,
+  onSwap,
+  onCheckout,
+  onMyBooking,
+  onBookingAgain,
+  onHome,
+}) {
+  const [showConfetti, setShowConfetti] = useState(true)
+
+  useEffect(() => {
+    const t = setTimeout(() => setShowConfetti(false), 4000)
+    return () => clearTimeout(t)
+  }, [])
+
+  const details = [
+    ['Nama',   form.name],
+    ['Plat',   form.plate],
+    ['Gedung', parking?.name],
+    ['Slot',   `${parking?.floor} – ${parking?.slot}`],
+  ]
+
   return (
     <Row className="justify-content-center animate-fade-up">
-      <Col lg={6}>
-        <Card className="text-center shadow-glow">
-          <Card.Body className="p-5">
-            <div style={{ fontSize: 64, marginBottom: 16 }}>✅</div>
-            <h3 style={{ color: 'var(--pf-text)' }}>Booking Berhasil!</h3>
-            <p className="mb-4">Tiket parkir Anda telah dikonfirmasi. Simpan kode berikut.</p>
+      <Col lg={7} xl={6}>
+        <div className="success-card">
+          {showConfetti && <Confetti />}
 
-            <div className="ticket-box mb-4">
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <img
-                  src="https://storage.googleapis.com/parkfinderbucket/foto/logo.png"
-                  alt="ParkFinder"
-                  style={{ height: 28, width: 'auto', objectFit: 'contain' }}
-                  onError={e => { e.target.style.display = 'none' }}
-                />
-                <Badge className="badge-pf-green px-2 py-1">Aktif</Badge>
-              </div>
-              <div className="ticket-code">{ticketCode}</div>
-              <div className="pf-divider" />
-              {[
-                ['Nama',   form.name],
-                ['Plat',   form.plate],
-                ['Gedung', parking?.name],
-                ['Slot',   `${parking?.floor} – ${parking?.slot}`],
-              ].map(([key, value]) => (
-                <div key={key} className="d-flex justify-content-between mb-2">
-                  <small style={{ color: 'var(--pf-text2)' }}>{key}</small>
-                  <small style={{ color: 'var(--pf-text)', fontWeight: 600, textAlign: 'right', maxWidth: 200 }}>{value}</small>
+          {/* 3D car (small) */}
+          <div className="success-3d-wrap">
+            <Suspense
+              fallback={
+                <div style={{ height: 240, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div className="spinner-3d" />
                 </div>
-              ))}
-              <div className="qr-box mt-3">
-                <span style={{ fontSize: 48 }}>📱</span>
-                <p style={{ margin: 0, fontSize: 13, color: 'var(--pf-text3)' }}>Scan QR ini saat tiba di lokasi</p>
+              }
+            >
+              <CarModel3D
+                height={240}
+                scale={2.6}
+                autoRotate={true}
+                fov={36}
+                cameraPos={[2.6, 0.6, 2.6]}
+              />
+            </Suspense>
+          </div>
+
+          {/* Header */}
+          <div className="text-center mb-4">
+            <div className="success-check-wrap">
+              <span className="success-check-icon">✓</span>
+            </div>
+            <h3 className="success-title">Booking Berhasil!</h3>
+            <p style={{ color: 'var(--pf-text2)', marginBottom: 0 }}>
+              Tiket parkir Anda telah dikonfirmasi. Simpan kode berikut.
+            </p>
+          </div>
+
+          {/* Ticket */}
+          <div className="ticket-box mb-4">
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontSize: 20 }}>🅿️</span>
+                <strong style={{ color: 'var(--pf-text)', fontSize: 15 }}>ParkFinder</strong>
               </div>
+              <Badge className="badge-pf-green px-2 py-1">✓ Aktif</Badge>
             </div>
 
-            <div className="d-flex flex-wrap gap-3 justify-content-center">
-              <Button className="btn-pf-outline btn" onClick={onSwap}>
-                🔄 Tukar Slot
-              </Button>
-              <Button className="btn btn-danger-pf" onClick={onCheckout}>
-                🚗 Keluar Parkir
-              </Button>
-              <Button className="btn-pf-primary btn" onClick={onMyBooking}>
-                📋 Lihat Parkiran Aktif
-              </Button>
-              <Button className="btn-pf-ghost btn" onClick={onBookingAgain}>Booking Lagi</Button>
-              <Button className="btn-pf-ghost btn" onClick={onHome}>Ke Beranda</Button>
+            <div className="ticket-code mb-3">{ticketCode}</div>
+
+            <div className="pf-divider" />
+
+            {details.map(([key, value]) => (
+              <div key={key} className="d-flex justify-content-between mb-2">
+                <small style={{ color: 'var(--pf-text2)' }}>{key}</small>
+                <small style={{ color: 'var(--pf-text)', fontWeight: 600, textAlign: 'right', maxWidth: 200 }}>
+                  {value}
+                </small>
+              </div>
+            ))}
+
+            <div className="qr-box mt-3">
+              <span style={{ fontSize: 44 }}>📱</span>
+              <p style={{ margin: 0, fontSize: 13, color: 'var(--pf-text3)' }}>
+                Tunjukkan QR ini saat tiba di lokasi
+              </p>
             </div>
-          </Card.Body>
-        </Card>
+          </div>
+
+          {/* Actions */}
+          <div className="d-flex flex-wrap gap-2 justify-content-center">
+            <Button className="btn-pf-primary btn" onClick={onMyBooking} id="success-view-booking">
+              📋 Lihat Parkiran Aktif
+            </Button>
+            <Button className="btn-pf-outline btn" onClick={onSwap} id="success-swap">
+              🔄 Tukar Slot
+            </Button>
+            <Button className="btn btn-danger-pf" onClick={onCheckout} id="success-checkout">
+              🚗 Keluar Parkir
+            </Button>
+            <Button className="btn-pf-ghost btn" onClick={onBookingAgain} id="success-book-again">
+              Booking Lagi
+            </Button>
+            <Button className="btn-pf-ghost btn" onClick={onHome} id="success-home">
+              Ke Beranda
+            </Button>
+          </div>
+        </div>
       </Col>
     </Row>
   )

@@ -47,7 +47,7 @@ export default function GuestActiveTicketBar({ onCancelled, className = 'mb-4' }
     <Alert
       className={className}
       style={{
-        background: 'rgba(0,210,255,0.08)',
+        background: 'var(--pf-accent-glow2)',
         border: '1.5px solid var(--pf-border2)',
         borderRadius: 12,
       }}

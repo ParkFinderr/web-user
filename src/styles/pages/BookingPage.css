@@ -1,41 +1,119 @@
-/* Stepper */
-.pf-stepper { display: flex; align-items: center; }
+/* ══════════════════════════════════════════════════════
+   BookingPage.css
+   ══════════════════════════════════════════════════════ */
+
+/* ── Stepper ───────────────────────────────────────── */
+.pf-stepper { display: flex; align-items: center; margin-bottom: 28px; }
 .pf-step { display: flex; align-items: center; flex: 1; gap: 0; }
 .pf-step-circle {
   width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; z-index: 1;
   display: flex; align-items: center; justify-content: center;
   font-size: 14px; font-weight: 700;
   background: var(--pf-card2); border: 2px solid var(--pf-border); color: var(--pf-text3);
-  transition: all 0.3s;
+  transition: all 0.3s ease;
 }
 .pf-step.active .pf-step-circle { background: var(--pf-accent-glow); border-color: var(--pf-accent); color: var(--pf-accent); }
-.pf-step.done .pf-step-circle   { background: var(--pf-green); border-color: var(--pf-green); color: #fff; }
+.pf-step.done   .pf-step-circle { background: var(--pf-green); border-color: var(--pf-green); color: #fff; }
 .pf-step-label { font-size: 13px; color: var(--pf-text3); margin-left: 10px; white-space: nowrap; font-weight: 500; }
-.pf-step.active .pf-step-label  { color: var(--pf-accent); }
-.pf-step.done .pf-step-label    { color: var(--pf-green); }
+.pf-step.active .pf-step-label  { color: var(--pf-accent); font-weight: 600; }
+.pf-step.done   .pf-step-label  { color: var(--pf-green); }
 .pf-step-line { flex: 1; height: 2px; background: var(--pf-border); margin: 0 12px; transition: background 0.3s; }
 .pf-step.done .pf-step-line { background: var(--pf-green); }
 
-/* Duration button */
+/* ── Duration button ───────────────────────────────── */
 .duration-btn { min-width: 72px; }
 
-/* Ticket */
-.ticket-box {
-  background: var(--pf-card2); border: 1.5px solid var(--pf-border2);
-  border-radius: 16px; padding: 24px; text-align: left;
-  box-shadow: 0 0 20px rgba(0,210,255,0.15);
-}
-.ticket-code {
-  font-size: 26px; font-weight: 900; letter-spacing: 3px; font-family: monospace;
-  color: var(--pf-text); background: var(--pf-bg); border: 1px dashed var(--pf-border2);
-  border-radius: 10px; padding: 12px; text-align: center; margin: 12px 0;
-}
-.qr-box {
-  background: var(--pf-bg); border: 1px dashed var(--pf-border);
-  border-radius: 12px; padding: 20px;
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
+/* ── Success Card ──────────────────────────────────── */
+.success-card {
+  background: var(--pf-card);
+  border: 1px solid var(--pf-border);
+  border-radius: 24px;
+  padding: 32px 28px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--pf-shadow);
 }
 
+.success-3d-wrap {
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto 16px;
+}
+
+.success-check-wrap {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--pf-green-bg);
+  border: 2px solid var(--pf-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 28px;
+  color: var(--pf-green);
+  animation: fadeUp 0.5s ease both;
+}
+
+.success-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--pf-text);
+  margin-bottom: 8px;
+}
+
+/* ── Ticket ────────────────────────────────────────── */
+.ticket-box {
+  background: var(--pf-card2);
+  border: 1.5px solid var(--pf-border);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: left;
+  position: relative;
+}
+
+.ticket-box::before,
+.ticket-box::after {
+  content: '';
+  position: absolute;
+  width: 22px; height: 22px;
+  background: var(--pf-bg);
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.ticket-box::before { left: -11px; }
+.ticket-box::after  { right: -11px; }
+
+.ticket-code {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  background: var(--pf-bg);
+  border: 1px dashed var(--pf-border2);
+  border-radius: 8px;
+  padding: 10px 16px;
+  color: var(--pf-accent);
+  word-break: break-all;
+  text-align: center;
+}
+
+.qr-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  background: var(--pf-bg);
+  border-radius: 12px;
+  border: 1px solid var(--pf-border);
+}
+
+/* ── Responsive ─────────────────────────────────── */
 @media (max-width: 576px) {
   .pf-step-label { display: none; }
+  .success-card { padding: 24px 16px; }
+  .ticket-box::before, .ticket-box::after { display: none; }
 }
