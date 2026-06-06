@@ -2,27 +2,27 @@ export default function MyBookingStats({ activeCount, expiredCount, totalCount }
   const stats = [
     {
       id: 'stat-active',
-      icon: '🟢',
+      abbr: 'AK',
       value: activeCount,
-      label: 'Parkiran Aktif',
+      label: 'Aktif',
       color: 'var(--pf-green)',
       bg: 'var(--pf-green-bg)',
       border: 'rgba(76,175,80,0.3)',
     },
     {
       id: 'stat-completed',
-      icon: '✓',
+      abbr: 'SE',
       value: expiredCount,
-      label: 'Selesai / Kedaluwarsa',
+      label: 'Selesai',
       color: 'var(--pf-text3)',
       bg: 'var(--pf-card2)',
       border: 'var(--pf-border)',
     },
     {
       id: 'stat-total',
-      icon: '🅿️',
+      abbr: 'TO',
       value: totalCount,
-      label: 'Total Booking',
+      label: 'Total',
       color: 'var(--pf-accent)',
       bg: 'var(--pf-accent-glow)',
       border: 'var(--pf-border2)',
@@ -38,7 +38,7 @@ export default function MyBookingStats({ activeCount, expiredCount, totalCount }
           className="booking-stat-card"
           style={{ background: s.bg, borderColor: s.border }}
         >
-          <div className="booking-stat-icon" style={{ color: s.color }}>{s.icon}</div>
+          <div className="booking-stat-abbr" style={{ color: s.color }}>{s.abbr}</div>
           <div className="booking-stat-value" style={{ color: s.color }}>{s.value}</div>
           <div className="booking-stat-label">{s.label}</div>
         </div>

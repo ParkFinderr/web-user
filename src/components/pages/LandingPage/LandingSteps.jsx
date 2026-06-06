@@ -1,6 +1,5 @@
 import { Col, Container, Row } from 'react-bootstrap'
 
-const STEP_ICONS = ['📍', '🅿️', '📱', '🚗']
 const STEP_COLORS = [
   'linear-gradient(135deg,#00D2FF,#0066AA)',
   'linear-gradient(135deg,#6366F1,#8B5CF6)',
@@ -13,7 +12,7 @@ export default function LandingSteps({ steps }) {
     <section className="py-5 landing-steps-section">
       <Container>
         <div className="mb-5 text-center animate-fade-up">
-          <span className="section-tag">📋 Cara Kerja</span>
+          <div className="section-label">Cara Kerja</div>
           <h2 className="fw-bold mt-2">4 Langkah Mudah</h2>
           <p style={{ maxWidth: 480, margin: '0 auto' }}>
             Dari pencarian hingga parkir — selesai dalam hitungan menit
@@ -25,7 +24,7 @@ export default function LandingSteps({ steps }) {
           {steps.map((step, i) => (
             <div key={step.num} className="step-item-h animate-fade-up" style={{ animationDelay: `${i * 0.1}s` }}>
               <div className="step-icon-wrap" style={{ background: STEP_COLORS[i] }}>
-                <span className="step-icon-emoji">{STEP_ICONS[i]}</span>
+                <span className="step-icon-num">{step.num}</span>
               </div>
               {i < steps.length - 1 && (
                 <div className="step-connector">
@@ -33,7 +32,6 @@ export default function LandingSteps({ steps }) {
                   <div className="step-connector-dot" />
                 </div>
               )}
-              <div className="step-num-badge">{step.num}</div>
               <h5 className="step-title">{step.title}</h5>
               <p className="step-desc">{step.desc}</p>
             </div>
@@ -46,12 +44,11 @@ export default function LandingSteps({ steps }) {
             <div key={step.num} className="step-item-v animate-fade-up" style={{ animationDelay: `${i * 0.1}s` }}>
               <div className="step-v-left">
                 <div className="step-icon-wrap-sm" style={{ background: STEP_COLORS[i] }}>
-                  <span>{STEP_ICONS[i]}</span>
+                  <span className="step-icon-num">{step.num}</span>
                 </div>
                 {i < steps.length - 1 && <div className="step-v-line" />}
               </div>
               <div className="step-v-content">
-                <div className="step-num-sm">{step.num}</div>
                 <h5 className="step-title">{step.title}</h5>
                 <p className="step-desc">{step.desc}</p>
               </div>

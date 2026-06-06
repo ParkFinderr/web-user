@@ -1,7 +1,6 @@
 import { Suspense, lazy } from 'react'
-import { Badge, Button, Col, Container, Row } from 'react-bootstrap'
+import { Button, Col, Container, Row } from 'react-bootstrap'
 
-// Lazy-load the 3D component – only loads when this section mounts
 const CarModel3D = lazy(() => import('../../3d/CarModel3D'))
 
 function HeroCarFallback() {
@@ -9,23 +8,20 @@ function HeroCarFallback() {
     <div
       style={{
         width: '100%',
-        height: 380,
+        height: 520,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        flexDirection: 'column',
-        gap: 12,
       }}
     >
-      <div className="canvas-3d-fallback" style={{ fontSize: 100 }}>🚗</div>
+      <div className="spinner-3d" />
     </div>
   )
 }
 
-export default function LandingHero({ onPrimaryCta, onSecondaryCta }) {
+export default function LandingHero({ onPrimaryCta, onSecondaryCta, onScanCta }) {
   return (
     <section className="hero-section">
-      {/* Background */}
       <div className="hero-bg">
         <div className="hero-overlay" />
       </div>
@@ -38,23 +34,20 @@ export default function LandingHero({ onPrimaryCta, onSecondaryCta }) {
           {/* Left – Content */}
           <Col lg={6}>
             <div className="animate-fade-up">
-              <span className="section-tag">
-                🅿️ Smart Parking System
-              </span>
+              <div className="hero-label mb-3">Smart Parking System</div>
 
               <h1 className="hero-title mb-3">
-                Parkir Cerdas,{' '}
-                <br />
+                Parkir Cerdas,<br />
                 <span className="gradient-text">Tanpa Repot</span>
               </h1>
 
               <p className="hero-desc mb-4">
                 ParkFinder membantu Anda menemukan dan memesan slot parkir
-                secara <strong>real-time</strong>. Amankan tempat sebelum tiba — cepat,
-                mudah, dan terpercaya.
+                secara <strong>real-time</strong>. Amankan tempat sebelum tiba —
+                cepat, mudah, dan terpercaya.
               </p>
 
-              {/* Stats inline */}
+              {/* Inline stats */}
               <div className="hero-inline-stats mb-5">
                 {[
                   { val: '150+', label: 'Gedung' },
@@ -76,14 +69,21 @@ export default function LandingHero({ onPrimaryCta, onSecondaryCta }) {
                   onClick={onPrimaryCta}
                   id="hero-cta-primary"
                 >
-                  🅿️ Pesan Parkir Sekarang
+                  Pesan Parkir Sekarang
                 </Button>
                 <Button
                   className="btn-pf-outline btn btn-lg"
                   onClick={onSecondaryCta}
                   id="hero-cta-secondary"
                 >
-                  🔍 Lihat Slot Tersedia
+                  Lihat Slot Tersedia
+                </Button>
+                <Button
+                  className="btn-pf-ghost btn btn-lg"
+                  onClick={onScanCta}
+                  id="hero-cta-scan"
+                >
+                  Scan Tiket
                 </Button>
               </div>
             </div>
@@ -102,9 +102,9 @@ export default function LandingHero({ onPrimaryCta, onSecondaryCta }) {
                 />
               </Suspense>
 
-              {/* Floating badge */}
+              {/* Floating badges – tanpa emoji */}
               <div className="hero-badge-float hero-badge-left animate-fade-up delay-4">
-                <span>🟢</span>
+                <div className="hero-badge-dot hero-badge-dot--green" />
                 <span>
                   <strong style={{ color: 'var(--pf-text)', display: 'block', fontSize: 13 }}>Slot Tersedia</strong>
                   <small style={{ color: 'var(--pf-text3)', fontSize: 11 }}>Real-time update</small>
@@ -112,7 +112,7 @@ export default function LandingHero({ onPrimaryCta, onSecondaryCta }) {
               </div>
 
               <div className="hero-badge-float hero-badge-right animate-fade-up delay-5">
-                <span>⚡</span>
+                <div className="hero-badge-dot hero-badge-dot--accent" />
                 <span>
                   <strong style={{ color: 'var(--pf-text)', display: 'block', fontSize: 13 }}>Booking Instan</strong>
                   <small style={{ color: 'var(--pf-text3)', fontSize: 11 }}>{'< 30 detik'}</small>

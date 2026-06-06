@@ -3,7 +3,6 @@ import { Badge, Button, Col, Row } from 'react-bootstrap'
 
 const CarModel3D = lazy(() => import('../../3d/CarModel3D'))
 
-// CSS confetti pieces
 const CONFETTI_COLORS = ['#00D2FF', '#6366F1', '#10B981', '#F59E0B', '#EF5350', '#8B5CF6', '#EC4899']
 
 function Confetti() {
@@ -68,7 +67,7 @@ export default function BookingSuccessStep({
         <div className="success-card">
           {showConfetti && <Confetti />}
 
-          {/* 3D car (small) */}
+          {/* 3D car */}
           <div className="success-3d-wrap">
             <Suspense
               fallback={
@@ -101,11 +100,8 @@ export default function BookingSuccessStep({
           {/* Ticket */}
           <div className="ticket-box mb-4">
             <div className="d-flex justify-content-between align-items-center mb-3">
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontSize: 20 }}>🅿️</span>
-                <strong style={{ color: 'var(--pf-text)', fontSize: 15 }}>ParkFinder</strong>
-              </div>
-              <Badge className="badge-pf-green px-2 py-1">✓ Aktif</Badge>
+              <strong style={{ color: 'var(--pf-text)', fontSize: 15 }}>ParkFinder</strong>
+              <Badge className="badge-pf-green px-2 py-1">Aktif</Badge>
             </div>
 
             <div className="ticket-code mb-3">{ticketCode}</div>
@@ -122,9 +118,8 @@ export default function BookingSuccessStep({
             ))}
 
             <div className="qr-box mt-3">
-              <span style={{ fontSize: 44 }}>📱</span>
-              <p style={{ margin: 0, fontSize: 13, color: 'var(--pf-text3)' }}>
-                Tunjukkan QR ini saat tiba di lokasi
+              <p style={{ margin: 0, fontSize: 13, color: 'var(--pf-text3)', fontWeight: 600 }}>
+                Tunjukkan tiket ini saat tiba di lokasi
               </p>
             </div>
           </div>
@@ -132,13 +127,13 @@ export default function BookingSuccessStep({
           {/* Actions */}
           <div className="d-flex flex-wrap gap-2 justify-content-center">
             <Button className="btn-pf-primary btn" onClick={onMyBooking} id="success-view-booking">
-              📋 Lihat Parkiran Aktif
+              Lihat Parkiran Aktif
             </Button>
             <Button className="btn-pf-outline btn" onClick={onSwap} id="success-swap">
-              🔄 Tukar Slot
+              Tukar Slot
             </Button>
             <Button className="btn btn-danger-pf" onClick={onCheckout} id="success-checkout">
-              🚗 Keluar Parkir
+              Keluar Parkir
             </Button>
             <Button className="btn-pf-ghost btn" onClick={onBookingAgain} id="success-book-again">
               Booking Lagi

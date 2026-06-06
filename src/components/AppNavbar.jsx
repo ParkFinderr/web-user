@@ -51,8 +51,9 @@ export default function AppNavbar() {
 
   const NAV_LINKS = [
     { to: '/',           label: 'Beranda',        end: true },
-    { to: '/parking',    label: 'Cari Parkir',     end: false },
-    { to: '/my-booking', label: 'Parkiran Aktif',  end: false, badge: activeCount },
+    { to: '/scan',       label: 'Scan Tiket',     end: false },
+    { to: '/parking',    label: 'Cari Parkir',    end: false },
+    { to: '/my-booking', label: 'Parkiran Aktif', end: false, badge: activeCount },
   ]
 
   return (
@@ -121,7 +122,7 @@ export default function AppNavbar() {
               className="btn-pf-primary btn"
               onClick={() => handleNav('/parking')}
             >
-              🅿 Cari Parkir
+              Cari Parkir
             </Button>
           </div>
         </Navbar.Collapse>

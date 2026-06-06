@@ -81,6 +81,7 @@ export default function LandingPage() {
       <LandingHero
         onPrimaryCta={() => navigate('/parking')}
         onSecondaryCta={() => navigate('/parking')}
+        onScanCta={() => navigate('/scan')}
       />
       <LandingStats stats={STATS} />
       <LandingParkings
