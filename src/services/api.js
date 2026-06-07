@@ -202,5 +202,10 @@ export const GuestService = {
 
   getDownloadAppLink: () => {
     return `${BASE_URL}/system/app/download`;
+  },
+
+  getDashboardStats: async () => {
+    const response = await fetch(`${BASE_URL}/stats/dashboard`);
+    return handleResponse(response);
   }
 };
