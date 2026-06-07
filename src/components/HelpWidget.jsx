@@ -45,9 +45,6 @@ export default function HelpWidget() {
               <Nav.Link eventKey="booking" className="help-tab-link">Booking</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="scan" className="help-tab-link">Scan</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
               <Nav.Link eventKey="swap" className="help-tab-link">Swap</Nav.Link>
             </Nav.Item>
             <Nav.Item>
@@ -60,6 +57,12 @@ export default function HelpWidget() {
             {activeTab === 'booking' && (
               <div className="tutorial-section">
                 <h6 className="tutorial-header">Pemesanan (Booking)</h6>
+                <div className="help-warning-note">
+                  <span className="help-warning-icon">⚠️</span>
+                  <p className="help-warning-text">
+                    <strong>Penting: Wajib Scan Masuk!</strong> Setelah booking selesai, Anda wajib melakukan scan QR tiket Anda di gerbang masuk parkir untuk mengaktifkan sesi parkir Anda.
+                  </p>
+                </div>
                 <p className="tutorial-desc">
                   Cara memesan slot parkir sebelum tiba di lokasi:
                 </p>
@@ -96,41 +99,15 @@ export default function HelpWidget() {
               </div>
             )}
 
-            {activeTab === 'scan' && (
-              <div className="tutorial-section">
-                <h6 className="tutorial-header">Scan Tiket</h6>
-                <p className="tutorial-desc">
-                  Gunakan scan untuk memverifikasi tiket fisik Anda:
-                </p>
-                <ul className="tutorial-steps">
-                  <li>
-                    <span className="step-num">1</span>
-                    <div className="step-text">
-                      <strong>Buka Scan</strong>
-                      <p>Pilih menu 'Scan Tiket' di navigasi utama.</p>
-                    </div>
-                  </li>
-                  <li>
-                    <span className="step-num">2</span>
-                    <div className="step-text">
-                      <strong>Pindai QR</strong>
-                      <p>Arahkan kamera ke QR tiket fisik atau unggah foto.</p>
-                    </div>
-                  </li>
-                  <li>
-                    <span className="step-num">3</span>
-                    <div className="step-text">
-                      <strong>Selesai</strong>
-                      <p>Sesi tiket Anda akan langsung aktif di aplikasi.</p>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            )}
-
             {activeTab === 'swap' && (
               <div className="tutorial-section">
                 <h6 className="tutorial-header">Tukar Slot (Swap)</h6>
+                <div className="help-warning-note">
+                  <span className="help-warning-icon">⚠️</span>
+                  <p className="help-warning-text">
+                    <strong>Wajib Scan Masuk!</strong> Fitur ini hanya dapat digunakan setelah tiket Anda di-scan di gerbang masuk parkir.
+                  </p>
+                </div>
                 <p className="tutorial-desc">
                   Cara mengganti posisi slot yang sudah dipesan:
                 </p>
@@ -163,6 +140,12 @@ export default function HelpWidget() {
             {activeTab === 'checkout' && (
               <div className="tutorial-section">
                 <h6 className="tutorial-header">Keluar Parkir (Checkout)</h6>
+                <div className="help-warning-note">
+                  <span className="help-warning-icon">⚠️</span>
+                  <p className="help-warning-text">
+                    <strong>Wajib Scan Masuk!</strong> Fitur ini hanya dapat digunakan setelah tiket Anda di-scan di gerbang masuk parkir.
+                  </p>
+                </div>
                 <p className="tutorial-desc">
                   Proses checkout dan pembayaran tiket parkir:
                 </p>
