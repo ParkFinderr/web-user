@@ -8,6 +8,7 @@ import MyBookingPage from './pages/MyBookingPage'
 import ParkingPage from './pages/ParkingPage'
 import ScanPage from './pages/ScanPage'
 import SwapPage from './pages/SwapPage'
+import HelpWidget from './components/HelpWidget'
 import './styles/index.css'
 
 export default function App() {
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/my-booking" element={<MyBookingPage />} />
           <Route path="*"        element={<Navigate to="/" replace />} />
         </Routes>
+        <HelpWidget />
       </BrowserRouter>
     </ThemeProvider>
   )

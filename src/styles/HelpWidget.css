@@ -1,0 +1,289 @@
+/* Wrapper */
+.help-widget-wrapper {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1050;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/* Floating Action Button (FAB) */
+.help-fab-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, var(--pf-accent) 0%, #0099ff 100%);
+  color: var(--pf-text-inv);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 25px rgba(0, 210, 255, 0.4);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.help-fab-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 12px 30px rgba(0, 210, 255, 0.55);
+}
+
+.help-fab-btn:active {
+  transform: scale(0.95);
+}
+
+.help-fab-btn.active {
+  background: var(--pf-card);
+  color: var(--pf-text);
+  border: 1px solid var(--pf-border);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Rotate close icon on open */
+.rotate-icon {
+  animation: rotateInIcon 0.25s ease-out;
+}
+
+@keyframes rotateInIcon {
+  from { transform: rotate(-90deg); }
+  to { transform: rotate(0); }
+}
+
+/* Popover Panel */
+.help-popover-panel {
+  position: absolute;
+  bottom: 74px;
+  right: 0;
+  width: 350px;
+  max-height: 480px;
+  background: var(--pf-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--pf-border);
+  border-radius: 18px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  
+  /* Animation states */
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.85) translateY(15px);
+  transform-origin: bottom right;
+  transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.help-popover-panel.open {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1) translateY(0);
+}
+
+[data-theme="light"] .help-popover-panel {
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Popover Arrow */
+.help-popover-arrow {
+  position: absolute;
+  bottom: -8px;
+  right: 20px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid var(--pf-card);
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.05));
+  z-index: 1051;
+}
+
+/* Popover Header */
+.help-popover-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--pf-border);
+}
+
+.help-popover-title {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--pf-text);
+  letter-spacing: -0.3px;
+}
+
+.help-popover-close {
+  background: transparent;
+  border: none;
+  color: var(--pf-text3);
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.help-popover-close:hover {
+  color: var(--pf-text);
+  background: var(--pf-border);
+}
+
+/* Popover Body */
+.help-popover-body {
+  padding: 16px;
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+/* Custom Scrollbar for Popover Body */
+.help-popover-body::-webkit-scrollbar {
+  width: 4px;
+}
+
+.help-popover-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.help-popover-body::-webkit-scrollbar-thumb {
+  background: var(--pf-border);
+  border-radius: 10px;
+}
+
+/* Tabs Styling */
+.help-tabs {
+  border-bottom: 1px solid var(--pf-border) !important;
+  display: flex;
+  justify-content: space-between;
+}
+
+.help-tab-link {
+  color: var(--pf-text3) !important;
+  border: none !important;
+  border-bottom: 2px solid transparent !important;
+  padding: 6px 8px !important;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.2s ease;
+  background: transparent !important;
+}
+
+.help-tab-link:hover {
+  color: var(--pf-text) !important;
+}
+
+.help-tab-link.active {
+  color: var(--pf-accent) !important;
+  border-bottom: 2px solid var(--pf-accent) !important;
+  background: transparent !important;
+}
+
+/* Content Area & Tutorial Sections */
+.help-content-area {
+  animation: fadeInHelp 0.2s ease-out;
+}
+
+@keyframes fadeInHelp {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.tutorial-header {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--pf-text);
+}
+
+.tutorial-desc {
+  font-size: 12.5px;
+  color: var(--pf-text3);
+  line-height: 1.4;
+  margin-bottom: 16px;
+}
+
+.tutorial-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.tutorial-steps li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.step-num {
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(135deg, var(--pf-accent) 0%, #0099ff 100%);
+  color: var(--pf-text-inv);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 11px;
+  flex-shrink: 0;
+  box-shadow: 0 3px 8px var(--pf-accent-glow2);
+}
+
+.step-text {
+  flex-grow: 1;
+}
+
+.step-text strong {
+  display: block;
+  font-size: 13.5px;
+  color: var(--pf-text);
+  margin-bottom: 2px;
+}
+
+.step-text p {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--pf-text3);
+  line-height: 1.4;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .help-widget-wrapper {
+    bottom: 16px;
+    right: 16px;
+  }
+  
+  .help-fab-btn {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .help-fab-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .help-popover-panel {
+    bottom: 64px;
+    right: 0;
+    width: calc(100vw - 32px);
+    max-width: 340px;
+    max-height: 400px;
+  }
+  
+  .help-popover-arrow {
+    right: 16px;
+  }
+  
+  .help-popover-body {
+    max-height: 320px;
+  }
+}
