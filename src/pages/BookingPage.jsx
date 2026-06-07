@@ -187,7 +187,6 @@ export default function BookingPage() {
             onSwap={() => navigate('/swap', { state: { ticketCode: guestSessionId, reservationId, name: form.name, plate: form.plate, phone: form.phone, parking } })}
             onCheckout={() => navigate('/checkout', { state: { ticketCode: guestSessionId, reservationId, name: form.name, plate: form.plate, phone: form.phone, parking } })}
             onMyBooking={() => navigate('/my-booking')}
-            onBookingAgain={() => navigate('/parking')}
             onHome={() => navigate('/')}
           />
         )}

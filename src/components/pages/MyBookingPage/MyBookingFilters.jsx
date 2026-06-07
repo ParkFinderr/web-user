@@ -7,7 +7,7 @@ export default function MyBookingFilters({ filter, onChange, activeCount, totalC
   ]
 
   return (
-    <div className="d-flex gap-2 mb-4 align-items-center flex-wrap">
+    <div className="booking-filter-row d-flex gap-2 mb-4 align-items-center flex-wrap">
       {filters.map(item => (
         <Button
           key={item.key}
@@ -30,7 +30,7 @@ export default function MyBookingFilters({ filter, onChange, activeCount, totalC
         <Button
           size="sm"
           variant="outline-danger"
-          className="ms-auto btn-pf-danger-outline"
+          className="booking-clear-btn ms-auto btn-pf-danger-outline"
           onClick={onClearAll}
           style={{ fontSize: 13, borderRadius: 10, padding: '6px 14px' }}
         >

@@ -1,6 +1,6 @@
 import { Badge, Button, Card, Col, Row } from 'react-bootstrap'
 
-export default function SwapSuccessStep({ booking, selectedParking, floor, newSlot, newTicketCode, onGoParking, onGoHome }) {
+export default function SwapSuccessStep({ booking, selectedParking, floor, newSlot, newTicketCode, onGoHome }) {
   return (
     <Row className="justify-content-center animate-fade-up">
       <Col lg={6}>
@@ -35,7 +35,7 @@ export default function SwapSuccessStep({ booking, selectedParking, floor, newSl
                 <div className="src-side">
                   <small style={{ color: 'var(--pf-text3)', fontSize: 10 }}>KE</small>
                   <div style={{ color: 'var(--pf-accent)', fontWeight: 700, fontSize: 13 }}>
-                    {floor} / {newSlot}
+                    {floor} / {newSlot?.displayName}
                   </div>
                   <div style={{ fontSize: 11, color: 'var(--pf-text3)' }}>{selectedParking?.name}</div>
                 </div>
@@ -57,7 +57,6 @@ export default function SwapSuccessStep({ booking, selectedParking, floor, newSl
             </div>
 
             <div className="d-flex gap-3 justify-content-center flex-wrap">
-              <Button className="btn-pf-outline btn" onClick={onGoParking}>Cari Parkir Lain</Button>
               <Button className="btn-pf-primary btn" onClick={onGoHome}>Ke Beranda</Button>
             </div>
           </Card.Body>

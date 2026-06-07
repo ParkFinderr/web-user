@@ -76,7 +76,6 @@ export default function CheckoutPage() {
           <CheckoutSuccessStep
             booking={booking}
             checkoutTime={checkoutTime}
-            onBookingAgain={() => navigate('/parking')}
             onHome={() => navigate('/')}
           />
         )}

@@ -13,6 +13,14 @@ import '../styles/pages/SwapPage.css'
 
 const SWAP_STEPS = ['Pilih Slot Baru', 'Konfirmasi Tukar', 'Selesai']
 
+const getSlotName = (slot, index) =>
+  slot.slotName || slot.slotNumber || slot.label || `Slot ${index + 1}`
+
+const getSlotAvailable = (slot) => {
+  const status = String(slot.appStatus || slot.status || '').toLowerCase()
+  return status === 'available' || status === 'empty' || status === 'tersedia'
+}
+
 /** Backend kadang { success, data }, kadang array/object langsung — supaya swap tidak kosong di produksi */
 function unwrapList(res) {
   if (res == null) return null
@@ -43,7 +51,7 @@ export default function SwapPage() {
   const [newSlot, setNewSlot] = useState(null)
   
   const [swapping, setSwapping] = useState(false)
-  const [newTicketCode] = useState(`PKF-SW-${Date.now().toString(36).toUpperCase().slice(-6)}`)
+  const [newTicketCode, setNewTicketCode] = useState('')
 
   // Fetch only the current parking area for swap to enforce same-building only
   useEffect(() => {
@@ -72,41 +80,55 @@ export default function SwapPage() {
 
   // Fetch slots for selected parking
   useEffect(() => {
-    if (selectedParking?.id) {
-      GuestService.getAllSlotsInArea(selectedParking.id)
-        .then(res => {
-          const list = unwrapList(res)
-          if (!Array.isArray(list)) {
-            setFloors([])
-            setFloor('')
-            return
-          }
-          const floorGroups = {}
-          list.forEach(slot => {
-            const f = `L${slot.floor}`
-            if (!floorGroups[f]) floorGroups[f] = { id: f, slots: [], available: [], rawSlots: [] }
-            const name = slot.slotName || slot.slotNumber || slot.label || String(slot.id ?? '')
-            if (!name) return
-            floorGroups[f].slots.push(name)
-            const st = String(slot.appStatus || slot.status || '').toLowerCase()
-            floorGroups[f].available.push(st === 'available')
-            floorGroups[f].rawSlots.push(slot)
-          })
-          const floorArr = Object.values(floorGroups).sort((a,b) => a.id.localeCompare(b.id))
-          setFloors(floorArr)
-          if (floorArr.length > 0) {
-            setFloor(floorArr[0].id)
-          } else {
-            setFloor('')
-          }
-        })
-        .catch(err => {
-          console.error("Error fetching slots", err)
+    if (!selectedParking?.id) return undefined
+
+    let active = true
+    GuestService.getAllSlotsInArea(selectedParking.id)
+      .then(res => {
+        if (!active) return
+
+        const list = unwrapList(res)
+        if (!Array.isArray(list)) {
           setFloors([])
           setFloor('')
+          return
+        }
+
+        const floorGroups = {}
+        list.forEach((slot, index) => {
+          const f = slot.floor !== undefined && slot.floor !== null ? `L${slot.floor}` : 'L1'
+          const displayName = getSlotName(slot, index)
+          const slotKey = String(slot.id ?? `${selectedParking.id}-${f}-${displayName}-${index}`)
+          const normalizedSlot = {
+            ...slot,
+            displayName,
+            slotKey,
+            isAvailable: getSlotAvailable(slot),
+          }
+
+          if (!floorGroups[f]) floorGroups[f] = { id: f, slots: [], available: [], rawSlots: [] }
+          floorGroups[f].slots.push(displayName)
+          floorGroups[f].available.push(normalizedSlot.isAvailable)
+          floorGroups[f].rawSlots.push(normalizedSlot)
         })
+
+        const floorArr = Object.values(floorGroups).sort((a, b) =>
+          a.id.localeCompare(b.id, undefined, { numeric: true })
+        )
+        setFloors(floorArr)
+        setFloor(floorArr[0]?.id || '')
+      })
+      .catch(err => {
+        if (!active) return
+        console.error("Error fetching slots", err)
+        setFloors([])
+        setFloor('')
+      })
+
+    return () => {
+      active = false
     }
-  }, [selectedParking])
+  }, [selectedParking?.id])
 
   if (!booking) {
     return (
@@ -126,11 +148,7 @@ export default function SwapPage() {
   const handleConfirmSwap = async () => {
     setSwapping(true)
     try {
-      const currentFloorData = floors.find(f => f.id === floor)
-      const slotData = currentFloorData?.rawSlots?.find(s => {
-        const name = s.slotName || s.slotNumber || s.label || String(s.id ?? '')
-        return name === newSlot
-      })
+      const slotData = newSlot
       
       if (!booking.reservationId) {
         throw new Error('ID reservasi tidak ada. Buat booking ulang lalu coba tukar slot lagi.')
@@ -140,11 +158,13 @@ export default function SwapPage() {
       }
 
       await GuestService.swapSlot(booking.reservationId, slotData.id)
+      const nextTicketCode = `PKF-SW-${Date.now().toString(36).toUpperCase().slice(-6)}`
+      setNewTicketCode(nextTicketCode)
       
       updateBooking(booking.ticketCode, { 
-        ticketCode: newTicketCode, 
+        ticketCode: nextTicketCode, 
         reservationId: booking.reservationId,
-        parking: { ...booking.parking, slot: newSlot, floor } 
+        parking: { ...booking.parking, slot: slotData.displayName, floor } 
       })
       
       setSwapping(false)
@@ -171,7 +191,7 @@ export default function SwapPage() {
             selectedParking={selectedParking}
             floor={floor}
             newSlot={newSlot}
-            onSelectParking={(parking) => { setSelectedParking(parking); setNewSlot(null) }}
+            onSelectParking={(parking) => { setSelectedParking(parking); setNewSlot(null); setFloors([]); setFloor('') }}
             onFloorChange={(value) => { setFloor(value); setNewSlot(null) }}
             onSelectSlot={setNewSlot}
             onNext={() => setStep(1)}
@@ -197,7 +217,6 @@ export default function SwapPage() {
             floor={floor}
             newSlot={newSlot}
             newTicketCode={newTicketCode}
-            onGoParking={() => navigate('/parking')}
             onGoHome={() => navigate('/')}
           />
         )}

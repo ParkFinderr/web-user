@@ -12,13 +12,19 @@ export default function SwapSelectStep({
   onSelectSlot,
   onNext,
 }) {
-  // Jangan pakai floors[1] — jika hanya ada satu lantai atau floors kosong, itu undefined dan bikin crash (layar hitam).
   const currentFloor = floors.find(item => item.id === floor) || {
-    id: floor || '—',
+    id: floor || '-',
     slots: [],
     available: [],
     rawSlots: [],
   }
+  const slotItems = currentFloor.rawSlots?.length
+    ? currentFloor.rawSlots
+    : currentFloor.slots.map((slot, index) => ({
+        displayName: slot,
+        slotKey: `${currentFloor.id}-${slot}-${index}`,
+        isAvailable: currentFloor.available[index],
+      }))
   const progressVariant = (occupancy) => occupancy >= 90 ? 'danger' : occupancy >= 75 ? 'warning' : 'info'
 
   return (
@@ -64,7 +70,7 @@ export default function SwapSelectStep({
         <Card className="h-100">
           {!selectedParking ? (
             <Card.Body className="d-flex flex-column align-items-center justify-content-center text-center" style={{ minHeight: 420 }}>
-              <div style={{ fontSize: 52, marginBottom: 12, opacity: 0.35 }}>🔄</div>
+              <div style={{ fontSize: 52, marginBottom: 12, opacity: 0.35 }}>Swap</div>
               <h5 style={{ color: 'var(--pf-text)' }}>Pilih Gedung Tujuan</h5>
               <p style={{ maxWidth: 260, fontSize: 14 }}>
                 Klik gedung di sebelah kiri untuk melihat slot yang bisa dituju
@@ -72,7 +78,7 @@ export default function SwapSelectStep({
             </Card.Body>
           ) : (
             <Card.Body>
-              <div className="d-flex justify-content-between align-items-start mb-3">
+              <div className="d-flex justify-content-between align-items-start mb-3 gap-3">
                 <div>
                   <h6 style={{ color: 'var(--pf-text)', marginBottom: 4 }}>{selectedParking.name}</h6>
                   <small style={{ color: 'var(--pf-text3)' }}>{selectedParking.address}</small>
@@ -93,27 +99,32 @@ export default function SwapSelectStep({
                 ))}
               </div>
 
-              <div className="d-flex gap-4 mb-3">
+              <div className="slot-legend">
                 {[['#4CAF50', 'Tersedia'], ['#EF5350', 'Terisi'], ['#00D2FF', 'Dipilih']].map(([color, label]) => (
-                  <span key={label} className="d-flex align-items-center gap-1" style={{ fontSize: 13, color: 'var(--pf-text2)' }}>
-                    <span style={{ width: 12, height: 12, background: color, borderRadius: 3, display: 'inline-block' }} />
+                  <span key={label} className="slot-legend-item">
+                    <span style={{ background: color }} />
                     {label}
                   </span>
                 ))}
               </div>
 
               <Row className="g-2 mb-4">
-                {currentFloor.slots.map((slot, index) => (
-                  <Col xs={4} sm={3} key={slot}>
-                    <button
-                      className={`slot-btn w-100 ${!currentFloor.available[index] ? 'slot-taken' : ''} ${newSlot === slot ? 'slot-picked' : ''}`}
-                      onClick={() => currentFloor.available[index] && onSelectSlot(slot)}
-                      disabled={!currentFloor.available[index]}
-                    >
-                      {slot}
-                    </button>
-                  </Col>
-                ))}
+                {slotItems.map((slot, index) => {
+                  const isAvailable = slot.isAvailable ?? currentFloor.available[index]
+                  const isSelected = newSlot?.slotKey === slot.slotKey
+
+                  return (
+                    <Col xs={6} sm={4} md={3} key={slot.slotKey || slot.id || `${slot.displayName}-${index}`}>
+                      <button
+                        className={`slot-btn w-100 ${!isAvailable ? 'slot-taken' : ''} ${isSelected ? 'slot-picked' : ''}`}
+                        onClick={() => isAvailable && onSelectSlot(slot)}
+                        disabled={!isAvailable}
+                      >
+                        {slot.displayName}
+                      </button>
+                    </Col>
+                  )
+                })}
               </Row>
 
               {newSlot && (
@@ -124,20 +135,19 @@ export default function SwapSelectStep({
                       <span style={{ fontWeight: 700, color: 'var(--pf-text)', fontSize: 14 }}>
                         {booking.parking?.floor} / {booking.parking?.slot}
                       </span>
-
                       <small style={{ display: 'block', color: 'var(--pf-text3)', fontSize: 11 }}>{booking.parking?.name}</small>
                     </div>
-                    <div className="swap-arrow">→</div>
+                    <div className="swap-arrow">to</div>
                     <div className="swap-preview-item">
                       <span style={{ fontSize: 11, color: 'var(--pf-text3)', display: 'block', marginBottom: 4 }}>KE</span>
                       <span style={{ fontWeight: 700, color: 'var(--pf-accent)', fontSize: 14 }}>
-                        {floor} / {newSlot}
+                        {floor} / {newSlot.displayName}
                       </span>
                       <small style={{ display: 'block', color: 'var(--pf-text3)', fontSize: 11 }}>{selectedParking.name}</small>
                     </div>
                   </div>
                   <Button className="btn-pf-primary btn w-100 mt-3" onClick={onNext}>
-                    Lanjut Konfirmasi Tukar →
+                    Lanjut Konfirmasi Tukar
                   </Button>
                 </div>
               )}

@@ -1,6 +1,6 @@
 import { Badge, Button, Card, Col, Row } from 'react-bootstrap'
 
-export default function CheckoutSuccessStep({ booking, checkoutTime, onBookingAgain, onHome }) {
+export default function CheckoutSuccessStep({ booking, checkoutTime, onHome }) {
   const fmtTime = (date) => date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
   const fmtDate = (date) => date.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })
 
@@ -52,9 +52,6 @@ export default function CheckoutSuccessStep({ booking, checkoutTime, onBookingAg
             </Card>
 
             <div className="d-flex gap-3 justify-content-center flex-wrap">
-              <Button className="btn-pf-primary btn" onClick={onBookingAgain}>
-                Booking Parkir Lagi
-              </Button>
               <Button className="btn-pf-ghost btn" onClick={onHome}>
                 Ke Beranda
               </Button>

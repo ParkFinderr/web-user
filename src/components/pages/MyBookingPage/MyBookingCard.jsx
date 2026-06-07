@@ -8,6 +8,7 @@ export default function MyBookingCard({ booking, index, formatDate, onSwap, onCh
       : booking.arrived
         ? { label: 'Di Slot', className: 'badge-pf-blue' }
         : { label: 'Aktif', className: 'badge-pf-green' }
+
   return (
     <Card
       className={`booking-card position-relative animate-fade-up ${booking.expired ? 'booking-card-expired' : 'booking-card-active'}`}
@@ -26,10 +27,11 @@ export default function MyBookingCard({ booking, index, formatDate, onSwap, onCh
           <line x1="14" y1="11" x2="14" y2="17"></line>
         </svg>
       </button>
-      <Card.Body className="p-4">
-        <Row className="align-items-start g-3">
-          <Col xs={12} md={4}>
-            <div className="d-flex align-items-center gap-2 mb-2">
+
+      <Card.Body className="booking-card-body">
+        <Row className="booking-card-row align-items-start g-3">
+          <Col xs={12} md={4} className="booking-ticket-section">
+            <div className="booking-card-brand">
               <img
                 src={`${cdn}/foto/logo.png`}
                 alt="ParkFinder"
@@ -43,12 +45,12 @@ export default function MyBookingCard({ booking, index, formatDate, onSwap, onCh
             <div className={`booking-code ${booking.expired ? 'booking-code-expired' : ''}`}>
               {booking.ticketCode}
             </div>
-            <small style={{ color: 'var(--pf-text3)', fontSize: 11 }}>
+            <small className="booking-date">
               Dibooking: {formatDate(booking.savedAt)}
             </small>
           </Col>
 
-          <Col xs={12} md={5}>
+          <Col xs={12} md={5} className="booking-detail-section">
             <div className="booking-detail-grid">
               {[
                 ['Pemesan', booking.name],
@@ -58,66 +60,71 @@ export default function MyBookingCard({ booking, index, formatDate, onSwap, onCh
               ].map(([key, value]) => (
                 <div key={key} className="bd-item">
                   <span className="bd-key">{key}</span>
-                  <span className="bd-val">{value || '—'}</span>
+                  <span className="bd-val">{value || '-'}</span>
                 </div>
               ))}
             </div>
             {booking.completedAt && !booking.expired && (
-              <small style={{ color: 'var(--pf-orange)', fontSize: 11, marginTop: 6, display: 'block' }}>
-                ✓ Parkir selesai: {formatDate(booking.completedAt)} — tiket masih aktif
+              <small className="booking-card-note booking-card-note-waiting">
+                Parkir selesai: {formatDate(booking.completedAt)}. Tiket masih aktif.
               </small>
             )}
             {booking.expired && booking.expiredAt && (
-              <small style={{ color: 'var(--pf-red)', fontSize: 11, marginTop: 6, display: 'block' }}>
-                ⏹ Keluar area: {formatDate(booking.expiredAt)}
+              <small className="booking-card-note booking-card-note-expired">
+                Keluar area: {formatDate(booking.expiredAt)}
               </small>
             )}
           </Col>
 
           {!booking.expired && (
-            <Col xs={12} md={3} className="d-flex flex-column gap-2">
+            <Col xs={12} md={3} className="booking-actions">
               {!booking.arrived ? (
-                <Button size="sm" className="btn btn-success w-100" onClick={() => onArrive?.(booking)} style={{ backgroundColor: '#28a745', borderColor: '#28a745' }}>
-                  ✓ Sudah Sampai
+                <Button size="sm" className="booking-action-button btn btn-success w-100" onClick={() => onArrive?.(booking)} style={{ backgroundColor: '#28a745', borderColor: '#28a745' }}>
+                  Sudah Sampai
                 </Button>
               ) : (
-                <Badge className="badge-pf-blue w-100" style={{ padding: '0.5rem', backgroundColor: '#007bff' }}>
-                  ✓ Sudah Tiba di Slot
+                <Badge className="booking-action-status badge-pf-blue w-100" style={{ backgroundColor: '#007bff' }}>
+                  Sudah Tiba di Slot
                 </Badge>
               )}
+
               {!booking.arrived && !booking.completed && booking.reservationId && (
-                <Button size="sm" className="btn-pf-outline btn w-100" onClick={() => onSwap(booking)}>
-                  🔄 Tukar Slot
+                <Button size="sm" className="booking-action-button btn-pf-outline btn w-100" onClick={() => onSwap(booking)}>
+                  Tukar Slot
                 </Button>
               )}
+
               {booking.arrived && !booking.completed && (
-                <Button size="sm" className="btn btn-warning w-100 text-dark" onClick={() => onCompletePark?.(booking)}>
-                  🅿️ Selesai Parkir
+                <Button size="sm" className="booking-action-button btn btn-warning w-100 text-dark" onClick={() => onCompletePark?.(booking)}>
+                  Selesai Parkir
                 </Button>
               )}
+
               {booking.completed && (
-                <Badge className="badge-pf-orange w-100" style={{ padding: '0.5rem' }}>
+                <Badge className="booking-action-status badge-pf-orange w-100">
                   Slot sudah dikosongkan
                 </Badge>
               )}
+
               {!booking.arrived && !booking.completed && (
                 <Button
                   size="sm"
                   variant="outline-danger"
-                  className="btn w-100"
+                  className="booking-action-button btn w-100"
                   onClick={() => onCancel?.(booking)}
                 >
-                  ✕ Batalkan Reservasi
+                  Batalkan Reservasi
                 </Button>
               )}
+
               <Button
                 size="sm"
-                className="btn btn-danger-pf w-100"
+                className="booking-action-button btn btn-danger-pf w-100"
                 onClick={() => onCheckout(booking)}
                 disabled={!booking.completed}
                 title={!booking.completed ? 'Selesaikan parkir terlebih dahulu' : undefined}
               >
-                🚗 Keluar Parkir
+                Keluar Parkir
               </Button>
             </Col>
           )}

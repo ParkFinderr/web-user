@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Container } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import MyBookingEmptyState from '../components/pages/MyBookingPage/MyBookingEmptyState'
@@ -8,19 +8,17 @@ import MyBookingList from '../components/pages/MyBookingPage/MyBookingList'
 import MyBookingStats from '../components/pages/MyBookingPage/MyBookingStats'
 import { GuestService } from '../services/api'
 import '../styles/pages/MyBookingPage.css'
-import { cancelBooking, getBookings, markBookingArrived, markParkingCompleted, deleteBooking, clearAllBookings } from '../utils/bookingStore'
-import { hasActiveGuestTicket, saveVerifiedTicket } from '../utils/guestTicketStore'
+import { cancelBooking, clearAllBookings, deleteBooking, getBookings, markBookingArrived, markParkingCompleted } from '../utils/bookingStore'
+import { saveVerifiedTicket } from '../utils/guestTicketStore'
 
 const CDN = 'https://storage.googleapis.com/parkfinderbucket'
 
 export default function MyBookingPage() {
   const navigate = useNavigate()
-  const [bookings, setBookings] = useState([])
+  const [bookings, setBookings] = useState(() => getBookings().slice(0, 3))
   const [filter, setFilter] = useState('active')
 
   const reload = () => setBookings(getBookings().slice(0, 3))
-
-  useEffect(() => { reload() }, [])
 
   const displayed = filter === 'active'
     ? bookings.filter(item => !item.expired)
@@ -30,7 +28,7 @@ export default function MyBookingPage() {
   const expiredCount = bookings.filter(item => item.expired).length
 
   const fmtDate = (iso) => {
-    if (!iso) return '—'
+    if (!iso) return '-'
     const date = new Date(iso)
     return date.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })
       + ' ' + date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
@@ -51,7 +49,7 @@ export default function MyBookingPage() {
 
   const handleCompletePark = async (booking) => {
     if (!booking.reservationId) {
-      alert('ID reservasi tidak ada. Buat booking baru lalu coba lagi.')
+      alert('ID reservasi tidak ada. Buat reservasi baru lalu coba lagi.')
       return
     }
     if (!booking.arrived) {
@@ -64,7 +62,7 @@ export default function MyBookingPage() {
       await GuestService.completeReservation(booking.reservationId)
       markParkingCompleted(booking.ticketCode)
       reload()
-      alert('✓ Parkir selesai. Slot dikosongkan. Saat keluar area, tekan "Keluar Parkir".')
+      alert('Parkir selesai. Slot dikosongkan. Saat keluar area, tekan "Keluar Parkir".')
     } catch (error) {
       console.error('Error complete park:', error)
       alert(error?.message || 'Gagal menyelesaikan parkir.')
@@ -92,23 +90,21 @@ export default function MyBookingPage() {
 
   const handleCancel = async (booking) => {
     if (!booking.reservationId) {
-      alert('ID reservasi tidak ada. Booking lama tidak bisa dibatalkan lewat API — hapus dari daftar atau buat booking baru.')
+      alert('ID reservasi tidak ada. Reservasi lama tidak bisa dibatalkan lewat API.')
       return
     }
-    if (!window.confirm('Batalkan reservasi parkir ini? Slot akan dilepas.')) return
+    if (!window.confirm('Batalkan reservasi parkir ini? Slot akan dilepas, tetapi tiket tetap aktif.')) return
 
     try {
       await GuestService.cancelReservation(booking.reservationId)
       cancelBooking(booking.ticketCode)
-      if (!hasActiveGuestTicket()) {
-        saveVerifiedTicket({
-          ticketId: booking.ticketId || null,
-          guestSessionId: booking.ticketCode || booking.reservationId || null,
-          qrCode: booking.ticketCode || booking.ticketId || booking.reservationId || null,
-        })
-      }
+      saveVerifiedTicket({
+        ticketId: booking.ticketId || null,
+        guestSessionId: booking.ticketCode || booking.reservationId || null,
+        qrCode: booking.ticketCode || booking.ticketId || booking.reservationId || null,
+      })
       reload()
-      alert('✓ Reservasi berhasil dibatalkan.')
+      alert('Reservasi berhasil dibatalkan. Tiket tetap aktif, jadi Anda tidak perlu scan ulang.')
     } catch (error) {
       console.error('Error cancel reservation:', error)
       alert(error?.message || 'Gagal membatalkan reservasi.')
@@ -119,8 +115,7 @@ export default function MyBookingPage() {
     const reservationId = booking.reservationId
     if (!reservationId) {
       alert(
-        'ID reservasi tidak ada di data booking ini (mungkin booking lama sebelum integrasi API). ' +
-          'Buat booking ulang dari alur parkir, lalu tekan "sudah sampai" lagi.'
+        'ID reservasi tidak ada di data ini. Buat reservasi ulang dari alur parkir, lalu tekan "Sudah Sampai" lagi.'
       )
       return
     }
@@ -129,7 +124,7 @@ export default function MyBookingPage() {
       await GuestService.arriveInSlot(reservationId)
       markBookingArrived(booking.ticketCode)
       reload()
-      alert('✓ Anda sudah tiba di slot parkir!')
+      alert('Anda sudah tiba di slot parkir.')
     } catch (error) {
       console.error('Error marking as arrived:', error)
       alert(error?.message || 'Gagal mengirim konfirmasi ke server. Periksa jaringan atau coba lagi.')
@@ -138,33 +133,24 @@ export default function MyBookingPage() {
 
   const handleDelete = (booking) => {
     if (!booking.expired) {
-      if (!window.confirm('Peringatan: Transaksi ini masih aktif. Menghapusnya dari riwayat lokal tidak akan membatalkan sesi di server. Hapus?')) return
-    } else {
-      if (!window.confirm('Hapus item riwayat booking ini?')) return
+      if (!window.confirm('Transaksi ini masih aktif. Menghapus dari riwayat lokal tidak membatalkan sesi di server. Hapus?')) return
+    } else if (!window.confirm('Hapus item riwayat ini?')) {
+      return
     }
     deleteBooking(booking.ticketCode)
     reload()
   }
 
   const handleClearAll = () => {
-    if (!window.confirm('Apakah Anda yakin ingin menghapus seluruh riwayat booking?')) return
+    if (!window.confirm('Hapus seluruh riwayat reservasi?')) return
     clearAllBookings()
     reload()
   }
 
   return (
-    <div style={{ paddingTop: 86, minHeight: '100vh' }}>
+    <div className="my-booking-page" style={{ paddingTop: 86, minHeight: '100vh' }}>
       <Container className="py-4">
-        <MyBookingHeader
-          onNewBooking={() => {
-            const hasTicket = hasActiveGuestTicket()
-            if (!hasTicket) {
-              navigate('/scan', { state: { redirect: '/parking' } })
-              return
-            }
-            navigate('/parking')
-          }}
-        />
+        <MyBookingHeader />
         <MyBookingStats activeCount={activeCount} expiredCount={expiredCount} totalCount={bookings.length} />
         <MyBookingFilters filter={filter} onChange={setFilter} activeCount={activeCount} totalCount={bookings.length} onClearAll={handleClearAll} />
 

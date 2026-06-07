@@ -10,9 +10,10 @@
 
 /* Slot buttons */
 .slot-btn {
-  padding: 12px 6px; border-radius: 10px; font-size: 13px; font-weight: 700;
+  min-height: 44px; padding: 10px 6px; border-radius: 10px; font-size: 13px; font-weight: 700;
   background: rgba(76,175,80,0.12); border: 1.5px solid var(--pf-green);
   color: var(--pf-green); cursor: pointer; transition: all 0.15s; font-family: 'Inter',sans-serif;
+  overflow-wrap: anywhere;
 }
 .slot-btn:hover:not(:disabled) { background: rgba(76,175,80,0.25); transform: scale(1.04); }
 .slot-taken { background: rgba(239,83,80,0.07) !important; border-color: var(--pf-border) !important; color: var(--pf-text3) !important; cursor: not-allowed !important; }
@@ -22,4 +23,42 @@
 .slot-action-box {
   background: var(--pf-card2); border: 1px solid var(--pf-border);
   border-radius: 12px; padding: 16px; margin-top: 8px;
+}
+
+.slot-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  margin-bottom: 16px;
+}
+
+.slot-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--pf-text2);
+}
+
+.slot-legend-item span {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+@media (max-width: 576px) {
+  .parking-list-item {
+    padding: 13px 14px;
+  }
+
+  .slot-btn {
+    min-height: 42px;
+    border-radius: 8px;
+    font-size: 12px;
+  }
+
+  .slot-action-box {
+    padding: 14px;
+  }
 }

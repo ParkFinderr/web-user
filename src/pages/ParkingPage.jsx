@@ -10,6 +10,14 @@ import { extractTicketId, GuestService } from '../services/api'
 import { getGuestTicketContextForBooking, saveVerifiedTicketFromApi } from '../utils/guestTicketStore'
 import '../styles/pages/ParkingPage.css'
 
+const getSlotName = (slot, index) =>
+  slot.slotName || slot.slotNumber || slot.label || `Slot ${index + 1}`
+
+const getSlotAvailable = (slot) => {
+  const status = String(slot.appStatus || slot.status || '').toLowerCase()
+  return status === 'available' || status === 'empty' || status === 'tersedia'
+}
+
 export default function ParkingPage() {
   const navigate = useNavigate()
   const location = useLocation()
@@ -52,31 +60,46 @@ export default function ParkingPage() {
   }, [])
 
   useEffect(() => {
-    if (selected?.id) {
-      GuestService.getAllSlotsInArea(selected.id)
-        .then(res => {
-          if (res.success && res.data) {
-            // Group slots by floor
-            const floorGroups = {}
-            res.data.forEach(slot => {
-              const f = `L${slot.floor}`
-              if (!floorGroups[f]) floorGroups[f] = { id: f, slots: [], available: [], rawSlots: [] }
-              floorGroups[f].slots.push(slot.slotName)
-              floorGroups[f].available.push(slot.appStatus === 'available')
-              floorGroups[f].rawSlots.push(slot)
-            })
-            const floorArr = Object.values(floorGroups).sort((a,b) => a.id.localeCompare(b.id))
-            setFloors(floorArr)
-            if (floorArr.length > 0) {
-              setFloor(floorArr[0].id)
-            } else {
-              setFloor('')
+    if (!selected?.id) return undefined
+
+    let active = true
+    GuestService.getAllSlotsInArea(selected.id)
+      .then(res => {
+        if (!active) return
+        if (res.success && res.data) {
+          const floorGroups = {}
+          res.data.forEach((slot, index) => {
+            const f = slot.floor !== undefined && slot.floor !== null ? `L${slot.floor}` : 'L1'
+            const displayName = getSlotName(slot, index)
+            const slotKey = String(slot.id ?? `${selected.id}-${f}-${displayName}-${index}`)
+            const normalizedSlot = {
+              ...slot,
+              displayName,
+              slotKey,
+              isAvailable: getSlotAvailable(slot),
             }
-          }
-        })
-        .catch(err => console.error("Error fetching slots", err))
+
+            if (!floorGroups[f]) floorGroups[f] = { id: f, slots: [], available: [], rawSlots: [] }
+            floorGroups[f].slots.push(displayName)
+            floorGroups[f].available.push(normalizedSlot.isAvailable)
+            floorGroups[f].rawSlots.push(normalizedSlot)
+          })
+
+          const floorArr = Object.values(floorGroups).sort((a, b) =>
+            a.id.localeCompare(b.id, undefined, { numeric: true })
+          )
+          setFloors(floorArr)
+          setFloor(floorArr[0]?.id || '')
+        }
+      })
+      .catch(err => {
+        if (active) console.error("Error fetching slots", err)
+      })
+
+    return () => {
+      active = false
     }
-  }, [selected])
+  }, [selected?.id])
 
   const filtered = parkings.filter(parking => parking.name.toLowerCase().includes(search.toLowerCase()))
   const currentFloor = floors.find(item => item.id === floor) || { id: floor, slots: [], available: [], rawSlots: [] }
@@ -106,6 +129,8 @@ export default function ParkingPage() {
                 if (parking.tag !== 'Penuh') {
                   setSelected(parking)
                   setSelectedSlot(null)
+                  setFloors([])
+                  setFloor('')
                 }
               }}
             />
@@ -122,10 +147,7 @@ export default function ParkingPage() {
                 selectedSlot={selectedSlot}
                 onSelectSlot={setSelectedSlot}
                 onBook={() => {
-                   const slotData = currentFloor.rawSlots?.find(s => {
-                     const name = s.slotName || s.slotNumber || s.label
-                     return name === selectedSlot
-                   })
+                   const slotData = selectedSlot
                    const ticketCtx = getGuestTicketContextForBooking()
                    const effectiveApiResult = apiResult || ticketCtx.apiResult
                    const effectiveQr = scannedQrCode || ticketCtx.scannedQrCode
@@ -135,7 +157,7 @@ export default function ParkingPage() {
                          redirect: '/parking',
                          parking: {
                            ...selected,
-                           slot: selectedSlot,
+                           slot: slotData?.displayName,
                            slotId: slotData?.id,
                            floor,
                          },
@@ -146,7 +168,7 @@ export default function ParkingPage() {
                    navigate('/booking', {
                      state: {
                        ...selected,
-                       slot: selectedSlot,
+                       slot: slotData?.displayName,
                        slotId: slotData?.id,
                        floor,
                        scannedQrCode: effectiveQr,

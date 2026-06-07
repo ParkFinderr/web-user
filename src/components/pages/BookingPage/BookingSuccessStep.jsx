@@ -44,7 +44,6 @@ export default function BookingSuccessStep({
   onSwap,
   onCheckout,
   onMyBooking,
-  onBookingAgain,
   onHome,
 }) {
   const [showConfetti, setShowConfetti] = useState(true)
@@ -134,9 +133,6 @@ export default function BookingSuccessStep({
             </Button>
             <Button className="btn btn-danger-pf" onClick={onCheckout} id="success-checkout">
               Keluar Parkir
-            </Button>
-            <Button className="btn-pf-ghost btn" onClick={onBookingAgain} id="success-book-again">
-              Booking Lagi
             </Button>
             <Button className="btn-pf-ghost btn" onClick={onHome} id="success-home">
               Ke Beranda

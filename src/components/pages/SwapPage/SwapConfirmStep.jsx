@@ -21,7 +21,7 @@ export default function SwapConfirmStep({ booking, selectedParking, floor, newSl
                 <div className="swap-compare-label">Slot Baru</div>
                 <div className="swap-compare-slot new">
                   <div className="sc-building">{selectedParking?.name}</div>
-                  <div className="sc-slot">{floor} / {newSlot}</div>
+                  <div className="sc-slot">{floor} / {newSlot?.displayName}</div>
                 </div>
               </div>
             </div>
