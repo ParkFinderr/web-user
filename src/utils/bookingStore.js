@@ -62,7 +62,7 @@ export function updateBooking(oldTicketCode, updatedBooking) {
 
 /** Ambil hanya yang masih aktif */
 export function getActiveBookings() {
-  return getBookings().filter(b => !b.expired)
+  return getBookings().slice(0, 3).filter(b => !b.expired)
 }
 
 /** Tandai booking sebagai arrived (sudah sampai di slot) */

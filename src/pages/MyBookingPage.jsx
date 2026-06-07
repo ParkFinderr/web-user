@@ -18,7 +18,7 @@ export default function MyBookingPage() {
   const [bookings, setBookings] = useState([])
   const [filter, setFilter] = useState('active')
 
-  const reload = () => setBookings(getBookings())
+  const reload = () => setBookings(getBookings().slice(0, 3))
 
   useEffect(() => { reload() }, [])
 
