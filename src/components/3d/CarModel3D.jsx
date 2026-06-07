@@ -57,7 +57,7 @@ export default function CarModel3D({
   cameraPos = [3, 0.8, 3],
 }) {
   return (
-    <div style={{ width: '100%', height }}>
+    <div style={{ width: '100%', height, pointerEvents: interactive ? 'auto' : 'none' }}>
       <Suspense fallback={<LoadingFallback height={height} />}>
         <Canvas
           camera={{ position: cameraPos, fov }}
@@ -83,6 +83,7 @@ export default function CarModel3D({
             autoRotate={autoRotate}
             autoRotateSpeed={1.8}
             enableZoom={interactive}
+            enableRotate={interactive}
             enablePan={false}
             minPolarAngle={Math.PI / 5}
             maxPolarAngle={Math.PI / 2.2}
