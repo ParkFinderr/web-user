@@ -1,5 +1,8 @@
-import { Button, Card, Col, Container, Row } from 'react-bootstrap'
+import { Card, Col, Container, Row } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
+import LandingFooter from '../components/pages/LandingPage/LandingFooter'
+
+const CDN = 'https://storage.googleapis.com/parkfinderbucket'
 
 const DEVELOPERS = [
   {
@@ -81,16 +84,8 @@ export default function AboutProjectPage() {
             </Col>
           ))}
         </Row>
-
-        <div className="mt-5 d-flex flex-wrap gap-3">
-          <Button className="btn-pf-primary btn" onClick={() => navigate('/parking')}>
-            Coba Sekarang
-          </Button>
-          <Button className="btn-pf-outline btn" onClick={() => navigate('/download-mobile')}>
-            Lihat Download Mobile
-          </Button>
-        </div>
       </Container>
+      <LandingFooter cdn={CDN} onNavigate={path => navigate(path)} />
     </div>
   )
 }

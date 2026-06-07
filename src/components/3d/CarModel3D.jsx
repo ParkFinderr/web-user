@@ -1,4 +1,4 @@
-import { Suspense, useRef } from 'react'
+import { Suspense, useRef, useState, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useGLTF, OrbitControls } from '@react-three/drei'
 
@@ -52,16 +52,42 @@ export default function CarModel3D({
   height = 360,
   scale = 2.5,
   autoRotate = true,
-  interactive = false,
+  interactive = null,
   fov = 35,
   cameraPos = [3, 0.8, 3],
 }) {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  const finalInteractive = interactive !== null ? interactive : !isMobile
+
   return (
-    <div style={{ width: '100%', height, pointerEvents: interactive ? 'auto' : 'none' }}>
+    <div
+      style={{
+        width: '100%',
+        height,
+        pointerEvents: finalInteractive ? 'auto' : 'none',
+        touchAction: finalInteractive ? 'none' : 'pan-y',
+      }}
+    >
       <Suspense fallback={<LoadingFallback height={height} />}>
         <Canvas
           camera={{ position: cameraPos, fov }}
-          style={{ width: '100%', height: '100%', display: 'block' }}
+          style={{
+            width: '100%',
+            height: '100%',
+            display: 'block',
+            pointerEvents: finalInteractive ? 'auto' : 'none',
+            touchAction: finalInteractive ? 'none' : 'pan-y',
+          }}
           gl={{
             antialias: true,
             alpha: true,
@@ -82,8 +108,8 @@ export default function CarModel3D({
           <OrbitControls
             autoRotate={autoRotate}
             autoRotateSpeed={1.8}
-            enableZoom={interactive}
-            enableRotate={interactive}
+            enableZoom={finalInteractive}
+            enableRotate={finalInteractive}
             enablePan={false}
             minPolarAngle={Math.PI / 5}
             maxPolarAngle={Math.PI / 2.2}

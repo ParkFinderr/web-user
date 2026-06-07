@@ -1,6 +1,7 @@
-import { Button, Card, Col, Container, Row } from 'react-bootstrap'
+import { Card, Col, Container, Row } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import LandingDownloadCta from '../components/pages/LandingPage/LandingDownloadCta'
+import LandingFooter from '../components/pages/LandingPage/LandingFooter'
 
 const CDN = 'https://storage.googleapis.com/parkfinderbucket'
 
@@ -51,16 +52,7 @@ export default function DownloadMobilePage() {
 
       <LandingDownloadCta cdn={CDN} />
 
-      <Container className="pb-5">
-        <div className="d-flex flex-wrap gap-3 justify-content-center">
-          <Button className="btn-pf-primary btn" onClick={() => navigate('/parking')}>
-            Coba Web App Sekarang
-          </Button>
-          <Button className="btn-pf-outline btn" onClick={() => navigate('/tentang-project')}>
-            Tentang Project
-          </Button>
-        </div>
-      </Container>
+      <LandingFooter cdn={CDN} onNavigate={path => navigate(path)} />
     </div>
   )
 }
