@@ -1,0 +1,187 @@
+import { useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { Col, Container, Row } from 'react-bootstrap'
+import ParkingHeader from '../components/ParkingHeader'
+import ParkingList from '../components/ParkingList'
+import ParkingSearch from '../components/ParkingSearch'
+import ParkingSlotPanel from '../components/ParkingSlotPanel'
+import GuestActiveTicketBar from '../../../shared/components/GuestActiveTicketBar/GuestActiveTicketBar'
+import { extractTicketId } from '../../../shared/services/apiClient'
+import { ParkingService } from '../services/parkingService'
+import { getGuestTicketContextForBooking, saveVerifiedTicketFromApi } from '../../../shared/utils/guestTicketStore'
+import '../../../shared/styles/pages/ParkingPage.css'
+
+const getSlotName = (slot, index) =>
+  slot.slotName || slot.slotNumber || slot.label || `Slot ${index + 1}`
+
+const getSlotAvailable = (slot) => {
+  const status = String(slot.appStatus || slot.status || '').toLowerCase()
+  return status === 'available' || status === 'empty' || status === 'tersedia'
+}
+
+export default function ParkingPage() {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const scannedQrCode = location.state?.scannedQrCode || null
+  const apiResult = location.state?.apiResult || null
+
+  const [search, setSearch] = useState('')
+  const [selected, setSelected] = useState(location.state?.id ? location.state : null)
+  const [floor, setFloor] = useState('')
+  const [selectedSlot, setSelectedSlot] = useState(null)
+
+  const [parkings, setParkings] = useState([])
+  const [floors, setFloors] = useState([])
+  const [ticketBarKey, setTicketBarKey] = useState(0)
+
+  useEffect(() => {
+    if (apiResult && scannedQrCode) {
+      saveVerifiedTicketFromApi(apiResult, scannedQrCode)
+    }
+  }, [apiResult, scannedQrCode])
+
+  useEffect(() => {
+    ParkingService.getAllAreas()
+      .then(res => {
+        if (res.success && res.data) {
+          const formatted = res.data.map(p => ({
+            id: p.id,
+            name: p.name,
+            occupancy: p.totalSlots > 0 ? Math.round(((p.totalSlots - p.availableSlots) / p.totalSlots) * 100) : 0,
+            slots: `${p.availableSlots}/${p.totalSlots} Kosong`,
+            distance: '0.0 km',
+            tag: p.availableSlots > 0 ? (p.availableSlots < p.totalSlots * 0.2 ? 'Ramai' : 'Tersedia') : 'Penuh',
+            tagClass: p.availableSlots > 0 ? (p.availableSlots < p.totalSlots * 0.2 ? 'orange' : 'green') : 'red',
+            address: p.address || 'Bandar Lampung'
+          }))
+          setParkings(formatted)
+        }
+      })
+      .catch(err => console.error("Error fetching areas", err))
+  }, [])
+
+  useEffect(() => {
+    if (!selected?.id) return undefined
+
+    let active = true
+    ParkingService.getAllSlotsInArea(selected.id)
+      .then(res => {
+        if (!active) return
+        if (res.success && res.data) {
+          const floorGroups = {}
+          res.data.forEach((slot, index) => {
+            const f = slot.floor !== undefined && slot.floor !== null ? `L${slot.floor}` : 'L1'
+            const displayName = getSlotName(slot, index)
+            const slotKey = String(slot.id ?? `${selected.id}-${f}-${displayName}-${index}`)
+            const normalizedSlot = {
+              ...slot,
+              displayName,
+              slotKey,
+              isAvailable: getSlotAvailable(slot),
+            }
+
+            if (!floorGroups[f]) floorGroups[f] = { id: f, slots: [], available: [], rawSlots: [] }
+            floorGroups[f].slots.push(displayName)
+            floorGroups[f].available.push(normalizedSlot.isAvailable)
+            floorGroups[f].rawSlots.push(normalizedSlot)
+          })
+
+          const floorArr = Object.values(floorGroups).sort((a, b) =>
+            a.id.localeCompare(b.id, undefined, { numeric: true })
+          )
+          setFloors(floorArr)
+          setFloor(floorArr[0]?.id || '')
+        }
+      })
+      .catch(err => {
+        if (active) console.error("Error fetching slots", err)
+      })
+
+    return () => {
+      active = false
+    }
+  }, [selected?.id])
+
+  const filtered = parkings.filter(parking => parking.name.toLowerCase().includes(search.toLowerCase()))
+  const currentFloor = floors.find(item => item.id === floor) || { id: floor, slots: [], available: [], rawSlots: [] }
+
+  const handleSearch = (value) => {
+    setSearch(value)
+    setSelected(null)
+    setSelectedSlot(null)
+    setFloors([])
+    setFloor('')
+  }
+
+  return (
+    <div style={{ paddingTop: 86, minHeight: '100vh' }}>
+      <Container className="py-4">
+        <ParkingHeader />
+        <GuestActiveTicketBar key={ticketBarKey} onCancelled={() => setTicketBarKey(k => k + 1)} />
+        <ParkingSearch search={search} onChange={handleSearch} onClear={() => handleSearch('')} />
+
+        <Row className="g-4">
+          <Col lg={5}>
+            <ParkingList
+              parkings={filtered}
+              selectedId={selected?.id}
+              search={search}
+              onSelect={(parking) => {
+                if (parking.tag !== 'Penuh') {
+                  setSelected(parking)
+                  setSelectedSlot(null)
+                  setFloors([])
+                  setFloor('')
+                }
+              }}
+            />
+          </Col>
+
+          <Col lg={7}>
+            {selected && (
+              <ParkingSlotPanel
+                selected={selected}
+                floors={floors}
+                floor={floor}
+                onFloorChange={(value) => { setFloor(value); setSelectedSlot(null) }}
+                currentFloor={currentFloor}
+                selectedSlot={selectedSlot}
+                onSelectSlot={setSelectedSlot}
+                onBook={() => {
+                   const slotData = selectedSlot
+                   const ticketCtx = getGuestTicketContextForBooking()
+                   const effectiveApiResult = apiResult || ticketCtx.apiResult
+                   const effectiveQr = scannedQrCode || ticketCtx.scannedQrCode
+                   if (!extractTicketId(effectiveApiResult) && !ticketCtx.ticketId) {
+                     navigate('/scan', {
+                       state: {
+                         redirect: '/parking',
+                         parking: {
+                           ...selected,
+                           slot: slotData?.displayName,
+                           slotId: slotData?.id,
+                           floor,
+                         },
+                       },
+                     })
+                     return
+                   }
+                   navigate('/booking', {
+                     state: {
+                       ...selected,
+                       slot: slotData?.displayName,
+                       slotId: slotData?.id,
+                       floor,
+                       scannedQrCode: effectiveQr,
+                       apiResult: effectiveApiResult,
+                     },
+                   })
+                }}
+              />
+            )}
+          </Col>
+        </Row>
+      </Container>
+    </div>
+  )
+}
