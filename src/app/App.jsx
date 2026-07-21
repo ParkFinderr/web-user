@@ -6,6 +6,7 @@ import { ThemeProvider } from '../shared/context/ThemeContext'
 import LandingPage from '../features/landing/pages/LandingPage'
 import AboutProjectPage from '../features/landing/pages/AboutProjectPage'
 import DownloadMobilePage from '../features/landing/pages/DownloadMobilePage'
+import TutorialPage from '../features/landing/pages/TutorialPage'
 import ScanPage from '../features/scan/pages/ScanPage'
 import ParkingPage from '../features/parking/pages/ParkingPage'
 import BookingPage from '../features/booking/pages/BookingPage'
@@ -16,7 +17,7 @@ import '../shared/styles/index.css'
 
 function AppShell() {
   const location = useLocation()
-  const isMarketingPage = ['/', '/tentang-project', '/download-mobile'].includes(location.pathname)
+  const isMarketingPage = ['/', '/tentang-project', '/download-mobile', '/tutorial'].includes(location.pathname)
 
   return (
     <>
@@ -25,6 +26,7 @@ function AppShell() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/tentang-project" element={<AboutProjectPage />} />
         <Route path="/download-mobile" element={<DownloadMobilePage />} />
+        <Route path="/tutorial" element={<TutorialPage />} />
         <Route path="/scan" element={<ScanPage />} />
         <Route path="/parking" element={<ParkingPage />} />
         <Route path="/booking" element={<BookingPage />} />

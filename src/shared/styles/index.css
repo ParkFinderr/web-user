@@ -25,6 +25,16 @@
   --pf-warning:       #f39c12;
   --pf-info:          #00bcd4;
 
+  --pf-card2:         #ffffff;
+  --pf-green:         #27ae60;
+  --pf-green-bg:      rgba(39, 174, 96, 0.08);
+  --pf-shadow:        0 4px 12px rgba(0,0,0,0.08);
+  --pf-accent2:       #00bcd4;
+  --pf-orange:        #f39c12;
+  --pf-red:           #e74c3c;
+  --pf-blue:          #0057ff;
+  --pf-hero-overlay:  transparent;
+
   /* Glass / Blur */
   --glass-bg:         rgba(255,255,255,0.70);
   --glass-border:     rgba(255,255,255,0.25);
@@ -37,34 +47,75 @@
 
   /* Spacing */
   --nav-h:            72px;
+  --accordion-icon-filter: none;
+
+  /* === Bootstrap mappings (Light Theme) === */
+  --bs-body-color:          var(--pf-text);
+  --bs-body-bg:             var(--pf-bg);
+  --bs-card-bg:             var(--pf-card);
+  --bs-card-color:          var(--pf-text);
+  --bs-card-border-color:   var(--pf-card-border);
+  --bs-heading-color:       var(--pf-text);
+  --bs-secondary-color:     var(--pf-text2);
+  --bs-tertiary-color:      var(--pf-text3);
+  --bs-primary:             var(--pf-accent);
+  --bs-border-color:        var(--pf-border);
 }
 
 /* === Dark Theme === */
 [data-theme="dark"] {
-  --pf-bg:            #0b0d14;
-  --pf-bg2:           #14171f;
-  --pf-bg3:           #1c1f2a;
-  --pf-card:          #1a1d28;
-  --pf-card-hover:    #212433;
-  --pf-card-border:   #2a2e3d;
-  --pf-text:          #e4e7ed;
-  --pf-text2:         #a0a5b5;
-  --pf-text3:         #5c6170;
-  --pf-text-inv:      #12141c;
-  --pf-accent:        #4387ff;
-  --pf-accent-hover:  #5f98ff;
-  --pf-accent-glow:   rgba(67, 135, 255, 0.12);
-  --pf-accent-glow2:  rgba(67, 135, 255, 0.06);
-  --pf-border:        #2a2e3d;
-  --pf-border2:       #3a3f50;
-  --pf-nav-bg:        rgba(12,14,20,0.80);
-  --pf-nav-shadow:    0 4px 30px rgba(0,0,0,0.30);
-  --glass-bg:         rgba(20,23,31,0.75);
-  --glass-border:     rgba(255,255,255,0.08);
-  --glass-shadow:     0 8px 32px rgba(0,0,0,0.30);
-  --shadow-sm:        0 1px 3px rgba(0,0,0,0.20);
-  --shadow-md:        0 4px 12px rgba(0,0,0,0.25);
-  --shadow-lg:        0 8px 32px rgba(0,0,0,0.35);
+  --pf-bg:            #0b0d19;
+  --pf-bg2:           #131926;
+  --pf-bg3:           #1e293b;
+  --pf-card:          #131926;
+  --pf-card-hover:    #1e293b;
+  --pf-card-border:   #1e293b;
+  --pf-text:          #f8fafc;
+  --pf-text2:         #94a3b8;
+  --pf-text3:         #64748b;
+  --pf-text-inv:      #0b0d19;
+  --pf-accent:        #60a5fa;
+  --pf-accent-hover:  #93c5fd;
+  --pf-accent-glow:   rgba(96, 165, 250, 0.15);
+  --pf-accent-glow2:  rgba(96, 165, 250, 0.08);
+  --pf-border:        #1e293b;
+  --pf-border2:       #334155;
+  --pf-nav-bg:        rgba(11, 13, 25, 0.85);
+  --pf-nav-shadow:    0 4px 30px rgba(0, 0, 0, 0.4);
+  --glass-bg:         rgba(19, 25, 38, 0.85);
+  --glass-border:     rgba(255, 255, 255, 0.05);
+  --glass-shadow:     0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-sm:        0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md:        0 4px 12px rgba(0, 0, 0, 0.35);
+  --shadow-lg:        0 8px 32px rgba(0, 0, 0, 0.45);
+  --accordion-icon-filter: invert(1) brightness(2);
+
+  --pf-danger:        #ef4444;
+  --pf-success:       #10b981;
+  --pf-warning:       #f59e0b;
+  --pf-info:          #06b6d4;
+
+  --pf-card2:         #131926;
+  --pf-green:         #10b981;
+  --pf-green-bg:      rgba(16, 185, 129, 0.12);
+  --pf-shadow:        0 4px 12px rgba(0,0,0,0.35);
+  --pf-accent2:       #06b6d4;
+  --pf-orange:        #f59e0b;
+  --pf-red:           #ef4444;
+  --pf-blue:          #60a5fa;
+  --pf-hero-overlay:  transparent;
+
+  /* === Bootstrap mappings (Dark Theme) === */
+  --bs-body-color:          var(--pf-text);
+  --bs-body-bg:             var(--pf-bg);
+  --bs-card-bg:             var(--pf-card);
+  --bs-card-color:          var(--pf-text);
+  --bs-card-border-color:   var(--pf-card-border);
+  --bs-heading-color:       var(--pf-text);
+  --bs-secondary-color:     var(--pf-text2);
+  --bs-tertiary-color:      var(--pf-text3);
+  --bs-primary:             var(--pf-accent);
+  --bs-border-color:        var(--pf-border);
 }
 
 /* === Global Reset === */
@@ -397,3 +448,140 @@ a:hover { color: var(--pf-accent-hover); }
 @media (max-width: 576px) {
   .container { padding-left: 16px; padding-right: 16px; }
 }
+
+/* === Accordion Custom Styling (Design System) === */
+.accordion {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--pf-border);
+}
+
+.accordion-item {
+  background: var(--pf-bg2);
+  border: none;
+  border-bottom: 1px solid var(--pf-border);
+  color: var(--pf-text);
+}
+
+.accordion-item:last-child {
+  border-bottom: none;
+}
+
+.accordion-button {
+  background: var(--pf-bg2);
+  color: var(--pf-text);
+  font-weight: 600;
+  font-size: 14.5px;
+  box-shadow: none !important;
+  border: none;
+  padding: 18px 24px;
+  transition: all 0.2s ease;
+}
+
+.accordion-button::after {
+  filter: var(--accordion-icon-filter);
+  transition: filter 0.2s ease;
+}
+
+/* Accordion expand state */
+.accordion-button:not(.collapsed) {
+  background: var(--pf-accent-glow);
+  color: var(--pf-accent);
+}
+
+.accordion-button:focus {
+  box-shadow: none;
+  border-color: transparent;
+}
+
+.accordion-body {
+  background: var(--pf-bg3);
+  color: var(--pf-text2);
+  font-size: 13.5px;
+  line-height: 1.6;
+  padding: 20px 24px;
+  border-top: 1px solid var(--pf-border);
+}
+
+/* === Centralized Theme-Aware Bootstrap Overrides === */
+.text-primary {
+  color: var(--pf-accent) !important;
+}
+.text-secondary {
+  color: var(--pf-text2) !important;
+}
+.text-muted {
+  color: var(--pf-text3) !important;
+}
+.bg-light {
+  background-color: var(--pf-bg3) !important;
+}
+.bg-white {
+  background-color: var(--pf-bg2) !important;
+}
+.border {
+  border-color: var(--pf-border) !important;
+}
+.border-top, .border-bottom, .border-start, .border-end {
+  border-color: var(--pf-border) !important;
+}
+
+/* === Centralized Bootstrap Enforcer Overrides === */
+body {
+  --bs-body-color: var(--pf-text) !important;
+  --bs-body-bg: var(--pf-bg) !important;
+  --bs-secondary-color: var(--pf-text2) !important;
+  --bs-tertiary-color: var(--pf-text3) !important;
+  --bs-heading-color: var(--pf-text) !important;
+  --bs-border-color: var(--pf-border) !important;
+  --bs-primary: var(--pf-accent) !important;
+  --bs-navbar-color: var(--pf-text2) !important;
+  --bs-navbar-hover-color: var(--pf-accent) !important;
+  --bs-navbar-active-color: var(--pf-text) !important;
+  --bs-navbar-brand-color: var(--pf-text) !important;
+  --bs-navbar-brand-hover-color: var(--pf-accent) !important;
+  
+  color: var(--pf-text) !important;
+  background-color: var(--pf-bg) !important;
+}
+
+[data-theme="dark"] body {
+  --bs-body-color: var(--pf-text) !important;
+  --bs-body-bg: var(--pf-bg) !important;
+  --bs-secondary-color: var(--pf-text2) !important;
+  --bs-tertiary-color: var(--pf-text3) !important;
+  --bs-heading-color: var(--pf-text) !important;
+  --bs-border-color: var(--pf-border) !important;
+  --bs-primary: var(--pf-accent) !important;
+  --bs-navbar-color: var(--pf-text2) !important;
+  --bs-navbar-hover-color: var(--pf-accent) !important;
+  --bs-navbar-active-color: var(--pf-text) !important;
+  --bs-navbar-brand-color: var(--pf-text) !important;
+  --bs-navbar-brand-hover-color: var(--pf-accent) !important;
+}
+
+.card {
+  --bs-card-bg: var(--pf-card) !important;
+  --bs-card-color: var(--pf-text) !important;
+  --bs-card-border-color: var(--pf-card-border) !important;
+  
+  background-color: var(--pf-card) !important;
+  color: var(--pf-text) !important;
+  border-color: var(--pf-card-border) !important;
+}
+
+.form-control, .form-select {
+  background-color: var(--pf-bg3) !important;
+  color: var(--pf-text) !important;
+  border-color: var(--pf-border) !important;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  color: var(--pf-text) !important;
+}
+
+.text-muted, .text-secondary, .text-body-secondary {
+  color: var(--pf-text2) !important;
+}
+
+

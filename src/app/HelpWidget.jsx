@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Nav } from 'react-bootstrap'
+import { FaExclamationTriangle } from 'react-icons/fa'
 import './HelpWidget.css'
 
 export default function HelpWidget() {
@@ -58,7 +59,7 @@ export default function HelpWidget() {
               <div className="tutorial-section">
                 <h6 className="tutorial-header">Pemesanan (Booking)</h6>
                 <div className="help-warning-note">
-                  <span className="help-warning-icon">⚠️</span>
+                  <span className="help-warning-icon"><FaExclamationTriangle /></span>
                   <p className="help-warning-text">
                     <strong>Penting: Wajib Scan Masuk!</strong> Setelah booking selesai, Anda wajib melakukan scan QR tiket Anda di gerbang masuk parkir untuk mengaktifkan sesi parkir Anda.
                   </p>
@@ -103,7 +104,7 @@ export default function HelpWidget() {
               <div className="tutorial-section">
                 <h6 className="tutorial-header">Tukar Slot (Swap)</h6>
                 <div className="help-warning-note">
-                  <span className="help-warning-icon">⚠️</span>
+                  <span className="help-warning-icon"><FaExclamationTriangle /></span>
                   <p className="help-warning-text">
                     <strong>Wajib Scan Masuk!</strong> Fitur ini hanya dapat digunakan setelah tiket Anda di-scan di gerbang masuk parkir.
                   </p>
@@ -116,7 +117,7 @@ export default function HelpWidget() {
                     <span className="step-num">1</span>
                     <div className="step-text">
                       <strong>Buka Tiket Aktif</strong>
-                      <p>Masuk ke menu 'Parkiran Aktif' di navigasi.</p>
+                      <p>Masuk ke menu 'Status Parkir' di navigasi.</p>
                     </div>
                   </li>
                   <li>
@@ -141,13 +142,13 @@ export default function HelpWidget() {
               <div className="tutorial-section">
                 <h6 className="tutorial-header">Keluar Parkir (Checkout)</h6>
                 <div className="help-warning-note">
-                  <span className="help-warning-icon">⚠️</span>
+                  <span className="help-warning-icon"><FaExclamationTriangle /></span>
                   <p className="help-warning-text">
                     <strong>Wajib Scan Masuk!</strong> Fitur ini hanya dapat digunakan setelah tiket Anda di-scan di gerbang masuk parkir.
                   </p>
                 </div>
                 <p className="tutorial-desc">
-                  Proses checkout dan pembayaran tiket parkir:
+                  Proses checkout dan keluar dari area parkir:
                 </p>
                 <ul className="tutorial-steps">
                   <li>
@@ -160,15 +161,8 @@ export default function HelpWidget() {
                   <li>
                     <span className="step-num">2</span>
                     <div className="step-text">
-                      <strong>Checkout</strong>
-                      <p>Ketuk tombol 'Keluar Parkir' untuk melihat tagihan.</p>
-                    </div>
-                  </li>
-                  <li>
-                    <span className="step-num">3</span>
-                    <div className="step-text">
-                      <strong>Pembayaran</strong>
-                      <p>Lakukan pembayaran sesuai metode yang Anda pilih.</p>
+                      <strong>Konfirmasi Keluar</strong>
+                      <p>Ketuk tombol 'Keluar Parkir' untuk verifikasi akhir dan gerbang otomatis akan terbuka.</p>
                     </div>
                   </li>
                 </ul>

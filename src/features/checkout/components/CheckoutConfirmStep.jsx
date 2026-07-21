@@ -1,10 +1,11 @@
 import { Alert, Badge, Button, Card, Col, Row } from 'react-bootstrap'
+import { FaExclamationTriangle, FaCheckCircle, FaCar } from 'react-icons/fa'
 
 export default function CheckoutConfirmStep({ booking, onBack, onConfirm, processing }) {
   return (
     <Row className="justify-content-center animate-fade-up">
       <Col lg={7}>
-        <Card className="mb-4 checkout-ticket-card">
+        <Card className="mb-4 checkout-ticket-card" style={{ background: 'var(--pf-bg2)', border: '1px solid var(--pf-border)' }}>
           <Card.Body className="p-4">
             <div className="d-flex justify-content-between align-items-center mb-3">
               <img
@@ -13,7 +14,7 @@ export default function CheckoutConfirmStep({ booking, onBack, onConfirm, proces
                 style={{ height: 28, width: 'auto', objectFit: 'contain' }}
                 onError={e => { e.target.style.display = 'none' }}
               />
-              <Badge className="badge-pf-orange px-2 py-1">Siap Keluar Area</Badge>
+              <Badge className="badge-pf-orange px-2 py-1" style={{ background: 'var(--pf-orange)', color: 'white' }}>Siap Keluar Area</Badge>
             </div>
 
             <div className="checkout-code">{booking.ticketCode}</div>
@@ -30,7 +31,7 @@ export default function CheckoutConfirmStep({ booking, onBack, onConfirm, proces
                 <Col xs={6} key={key}>
                   <div className="checkout-info-cell">
                     <div className="checkout-info-key">{key}</div>
-                    <div className="checkout-info-val">{value || '—'}</div>
+                    <div className="checkout-info-val" style={{ color: 'var(--pf-text)' }}>{value || '—'}</div>
                   </div>
                 </Col>
               ))}
@@ -38,23 +39,23 @@ export default function CheckoutConfirmStep({ booking, onBack, onConfirm, proces
           </Card.Body>
         </Card>
 
-        <Alert className="checkout-warning mb-4">
+        <Alert className="checkout-warning mb-4" style={{ background: 'rgba(245,158,11,0.1)', border: '1.5px solid rgba(245,158,11,0.3)' }}>
           <div className="d-flex gap-3 align-items-start">
-            <span style={{ fontSize: 28, flexShrink: 0 }}>⚠️</span>
+            <span style={{ fontSize: 24, flexShrink: 0, color: 'var(--pf-orange)', display: 'flex' }}><FaExclamationTriangle /></span>
             <div>
               <strong style={{ color: 'var(--pf-orange)', display: 'block', marginBottom: 6 }}>
                 Perhatian!
               </strong>
               <p style={{ margin: 0, fontSize: 14, color: 'var(--pf-text2)', lineHeight: 1.6 }}>
                 Slot parkir sudah dikosongkan (selesai parkir).
-                Langkah ini akan <strong style={{ color: 'var(--pf-red)' }}>menghapus tiket dan reservasi</strong> setelah Anda keluar dari area.
+                Langkah ini akan <strong style={{ color: 'var(--pf-danger)' }}>menghapus tiket dan reservasi</strong> setelah Anda keluar dari area.
                 Pastikan kendaraan sudah di jalur keluar / gate sebelum konfirmasi.
               </p>
             </div>
           </div>
         </Alert>
 
-        <Card className="mb-4">
+        <Card className="mb-4" style={{ background: 'var(--pf-bg2)', border: '1px solid var(--pf-border)' }}>
           <Card.Body className="p-4">
             <h6 className="mb-3" style={{ color: 'var(--pf-text)' }}>Pastikan sebelum keluar:</h6>
             {[
@@ -63,7 +64,9 @@ export default function CheckoutConfirmStep({ booking, onBack, onConfirm, proces
               'Gate keluar sudah terbuka',
             ].map(item => (
               <div key={item} className="d-flex align-items-center gap-3 mb-3">
-                <div className="checkout-check-icon">✓</div>
+                <div className="checkout-check-icon" style={{ background: 'rgba(16, 185, 129, 0.15)', color: 'var(--pf-success)', border: '1.5px solid var(--pf-success)' }}>
+                  <FaCheckCircle />
+                </div>
                 <span style={{ fontSize: 14, color: 'var(--pf-text2)' }}>{item}</span>
               </div>
             ))}
@@ -71,15 +74,19 @@ export default function CheckoutConfirmStep({ booking, onBack, onConfirm, proces
         </Card>
 
         <div className="d-flex gap-3 justify-content-between">
-          <Button className="btn-pf-ghost btn" onClick={onBack} disabled={processing}>
+          <Button className="btn-pf-ghost btn" onClick={onBack} disabled={processing} style={{ background: 'var(--pf-bg3)', color: 'var(--pf-text)', border: '1px solid var(--pf-border)' }}>
             ← Batal
           </Button>
-          <Button className="btn btn-danger-pf btn-lg" onClick={onConfirm} disabled={processing} style={{ flex: 1, maxWidth: 320 }}>
+          <Button className="btn btn-danger btn-lg d-flex align-items-center justify-content-center gap-2" onClick={onConfirm} disabled={processing} style={{ flex: 1, maxWidth: 320, background: 'var(--pf-danger)', border: 'none' }}>
             {processing ? (
               <span className="d-flex align-items-center justify-content-center gap-2">
                 <span className="mini-spinner" /> Memproses Keluar...
               </span>
-            ) : '🚗 Konfirmasi Keluar Parkir'}
+            ) : (
+              <>
+                <FaCar /> Konfirmasi Keluar Parkir
+              </>
+            )}
           </Button>
         </div>
       </Col>

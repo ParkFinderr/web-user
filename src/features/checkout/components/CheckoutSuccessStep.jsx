@@ -7,10 +7,10 @@ export default function CheckoutSuccessStep({ booking, checkoutTime, onHome }) {
   return (
     <Row className="justify-content-center animate-fade-up">
       <Col lg={6}>
-        <Card className="text-center">
+        <Card className="text-center" style={{ background: 'var(--pf-bg2)', border: '1px solid var(--pf-border)' }}>
           <Card.Body className="p-5">
             <div className="destroyed-ticket-container mb-4">
-              <div className="destroyed-ticket">
+              <div className="destroyed-ticket" style={{ background: 'var(--pf-bg3)', border: '1.5px solid var(--pf-border)' }}>
                 <div className="destroyed-stripe" />
                 <div className="d-flex justify-content-between align-items-center mb-3 opacity-50">
                   <img
@@ -19,21 +19,21 @@ export default function CheckoutSuccessStep({ booking, checkoutTime, onHome }) {
                     style={{ height: 24, width: 'auto', objectFit: 'contain', filter: 'grayscale(1)' }}
                     onError={e => { e.target.style.display = 'none' }}
                   />
-                  <Badge style={{ background: 'rgba(239,83,80,0.15)', color: 'var(--pf-red)', border: '1px solid rgba(239,83,80,0.3)' }} className="px-2 py-1">
+                  <Badge style={{ background: 'rgba(239,83,80,0.15)', color: 'var(--pf-danger)', border: '1px solid rgba(239,83,80,0.3)' }} className="px-2 py-1">
                     Tidak Aktif
                   </Badge>
                 </div>
-                <div className="destroyed-code">{booking.ticketCode}</div>
-                <div className="destroyed-stamp">EXPIRED</div>
+                <div className="destroyed-code" style={{ background: 'var(--pf-bg2)', border: '1px dashed var(--pf-border)' }}>{booking.ticketCode}</div>
+                <div className="destroyed-stamp" style={{ color: 'var(--pf-danger)', borderColor: 'var(--pf-danger)' }}>EXPIRED</div>
               </div>
             </div>
 
             <h3 className="mb-2" style={{ color: 'var(--pf-text)' }}>Berhasil Keluar Parkir</h3>
-            <p className="mb-4" style={{ fontSize: 15 }}>
+            <p className="mb-4" style={{ fontSize: 15, color: 'var(--pf-text2)' }}>
               Tiket Anda telah dinonaktifkan. Slot parkir sudah dilepas dan tersedia untuk pengguna lain.
             </p>
 
-            <Card className="mb-4" style={{ textAlign: 'left' }}>
+            <Card className="mb-4" style={{ textAlign: 'left', background: 'var(--pf-bg2)', border: '1px solid var(--pf-border)' }}>
               <Card.Body className="py-3 px-4">
                 {[
                   ['Nama', booking.name],
@@ -43,7 +43,7 @@ export default function CheckoutSuccessStep({ booking, checkoutTime, onHome }) {
                   ['Waktu Keluar', fmtTime(checkoutTime)],
                   ['Tanggal', fmtDate(checkoutTime)],
                 ].map(([key, value]) => (
-                  <div key={key} className="d-flex justify-content-between py-2 border-bottom border-pf gap-3">
+                  <div key={key} className="d-flex justify-content-between py-2 border-bottom gap-3" style={{ borderColor: 'var(--pf-border)' }}>
                     <small style={{ color: 'var(--pf-text2)' }}>{key}</small>
                     <small style={{ color: 'var(--pf-text)', fontWeight: 600, textAlign: 'right', maxWidth: 220 }}>{value}</small>
                   </div>
@@ -52,7 +52,7 @@ export default function CheckoutSuccessStep({ booking, checkoutTime, onHome }) {
             </Card>
 
             <div className="d-flex gap-3 justify-content-center flex-wrap">
-              <Button className="btn-pf-ghost btn" onClick={onHome}>
+              <Button className="btn-pf-primary btn" style={{ background: 'var(--pf-accent)', color: 'white', border: 'none' }} onClick={onHome}>
                 Ke Beranda
               </Button>
             </div>
