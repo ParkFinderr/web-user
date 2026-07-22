@@ -15,8 +15,8 @@ import { useTheme } from '../../../shared/context/ThemeContext'
 import LandingFooter from '../../../shared/components/LandingFooter/LandingFooter'
 import { ParkingService } from '../../parking/services/parkingService'
 
-import landingHeroCampus from '../../../assets/landing_hero_campus.png'
-import landingHeroNature from '../../../assets/landing_hero_nature.png'
+import landingHeroCampus from '../../../assets/landing/landing_hero_campus.png'
+import landingHeroNature from '../../../assets/landing/landing_hero_nature.png'
 
 const CDN = 'https://storage.googleapis.com/parkfinderbucket'
 

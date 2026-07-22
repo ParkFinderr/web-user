@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { FaApple, FaAndroid, FaStar } from 'react-icons/fa'
 import { useTheme } from '../../../shared/context/ThemeContext'
 import LandingFooter from '../../../shared/components/LandingFooter/LandingFooter'
-import scanLightMock from '../../../assets/scan_light_mock.png'
-import scanDarkMock from '../../../assets/scan_dark_mock.png'
+import scanLightMock from '../../../assets/scan/scan_light_mock.png'
+import scanDarkMock from '../../../assets/scan/scan_dark_mock.png'
 
 const CDN = 'https://storage.googleapis.com/parkfinderbucket'
 

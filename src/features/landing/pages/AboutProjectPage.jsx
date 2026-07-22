@@ -4,13 +4,15 @@ import {
   FaRocket, 
   FaFlag, 
   FaApple, 
-  FaAndroid 
+  FaAndroid,
+  FaLaptopCode,
+  FaServer,
+  FaLightbulb
 } from 'react-icons/fa'
 import { useTheme } from '../../../shared/context/ThemeContext'
 import LandingFooter from '../../../shared/components/LandingFooter/LandingFooter'
-import commonAvatar from '../../../assets/common_avatar.png'
-import parkingBuildingElektro from '../../../assets/parking_building_elektro.png'
-import scanDarkMock from '../../../assets/scan_dark_mock.png'
+import parkingBuildingElektro from '../../../assets/parking/parking_building_elektro.png'
+import scanDarkMock from '../../../assets/scan/scan_dark_mock.png'
 
 const CDN = 'https://storage.googleapis.com/parkfinderbucket'
 
@@ -24,16 +26,19 @@ export default function AboutProjectPage() {
       name: 'Imam Ariadi',
       role: 'Frontend Developer',
       focus: 'React UI, routing, dan UX flow',
+      icon: <FaLaptopCode />
     },
     {
       name: 'Tim Backend',
       role: 'Integrasi API & Sistem',
       focus: 'Reservasi, verifikasi tiket, dan layanan data parkir',
+      icon: <FaServer />
     },
     {
       name: 'Tim Produk',
       role: 'Produk & Riset',
       focus: 'Validasi kebutuhan pengguna dan roadmap fitur',
+      icon: <FaLightbulb />
     },
   ]
 
@@ -102,7 +107,19 @@ export default function AboutProjectPage() {
           {developers.map((dev, index) => (
             <Col key={index} md={4}>
               <Card className="h-100 text-center border-0 shadow-sm p-4" style={{ borderRadius: 16, background: 'var(--pf-bg2)', border: '1px solid var(--pf-border)' }}>
-                <img src={commonAvatar} alt={dev.name} className="mx-auto mb-3 rounded-circle" style={{ width: 70, height: 70, border: '3px solid var(--pf-border)' }} />
+                <div 
+                  className="mx-auto mb-3 rounded-circle d-flex align-items-center justify-content-center" 
+                  style={{ 
+                    width: 70, 
+                    height: 70, 
+                    background: 'var(--pf-bg3)', 
+                    border: '3px solid var(--pf-border)',
+                    color: 'var(--pf-accent)',
+                    fontSize: 28
+                  }}
+                >
+                  {dev.icon}
+                </div>
                 <h5 className="fw-bold mb-1">{dev.name}</h5>
                 <div className="fw-bold mb-3" style={{ fontSize: 13, color: 'var(--pf-accent)' }}>{dev.role}</div>
                 <p className="mb-0 text-muted" style={{ fontSize: 13.5, color: 'var(--pf-text2)' }}>{dev.focus}</p>

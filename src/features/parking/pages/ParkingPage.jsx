@@ -19,10 +19,9 @@ import { getGuestTicketContextForBooking, saveVerifiedTicketFromApi } from '../.
 import { useTheme } from '../../../shared/context/ThemeContext'
 import '../../../shared/styles/pages/ParkingPage.css'
 
-import parkingMapNature from '../../../assets/parking_map_nature.png'
-import parkingMapCampus from '../../../assets/parking_map_campus.png'
-import parkingBuildingElektro from '../../../assets/parking_building_elektro.png'
-import parkingBuildingPerpustakaan from '../../../assets/parking_building_perpustakaan.png'
+import parkingMapCampus from '../../../assets/parking/parking_map_campus.png'
+import parkingBuildingElektro from '../../../assets/parking/parking_building_elektro.png'
+import parkingBuildingPerpustakaan from '../../../assets/parking/parking_building_perpustakaan.png'
 
 const getSlotName = (slot, index) =>
   slot.slotName || slot.slotNumber || slot.label || `Slot ${index + 1}`

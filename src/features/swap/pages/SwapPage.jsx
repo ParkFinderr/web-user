@@ -9,7 +9,7 @@ import { SwapService } from '../services/swapService'
 import { updateBooking } from '../../../shared/utils/bookingStore'
 import '../../../shared/styles/pages/SwapPage.css'
 
-import scanLightMock from '../../../assets/scan_light_mock.png'
+import scanLightMock from '../../../assets/scan/scan_light_mock.png'
 
 const getSlotName = (slot, index) =>
   slot.slotName || slot.slotNumber || slot.label || `Slot ${index + 1}`
